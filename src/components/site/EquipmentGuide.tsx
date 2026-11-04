@@ -109,7 +109,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
-import { Eyebrow, Icon } from "./primitives";
+import { Eyebrow } from "./primitives";
 import { slugify } from "./navigation";
 import { FLEET_TYPES } from "./fleetTypes";
 
@@ -398,32 +398,54 @@ export default function EquipmentGuide() {
           const content = (
             <>
               <span
-                className={`font-display text-2xl leading-none lg:text-xl ${
-                  isActive ? "text-tnt-amber" : "text-black/35"
+                className={`font-display text-2xl leading-none transition-colors group-hover:text-white group-focus-visible:text-white lg:text-xl ${
+                  isActive ? "text-white" : "text-black/35"
                 }`}
               >
                 {String(i + 1).padStart(2, "0")}
               </span>
-              <Icon
-                name={t.icon}
-                className={`mt-4 h-9 w-9 lg:mt-2.5 lg:h-7 lg:w-7 ${isActive ? "text-tnt-amber" : "text-black/50"}`}
-                strokeWidth={1.5}
+              {/* FIGMA CRANE ICONS (2026-11-04, on request — "follow the same
+                  icon from that section in Figma"): the six silhouettes from
+                  the Figma "Crane Classes Strip" (nodes 1053:3112–3141),
+                  exported as SVG into public/icons/fleet/<slug>.svg. Drawn
+                  as a CSS mask over `bg-current`, so they take the text
+                  color: gold when active, gray otherwise, as in the design.
+                  Replaces the generic line icons (`Icon name={t.icon}`). */}
+              <span
+                aria-hidden="true"
+                className={`mt-4 block h-9 w-9 bg-current transition-colors group-hover:text-tnt-amber group-focus-visible:text-tnt-amber lg:mt-2.5 lg:h-8 lg:w-8 ${isActive ? "text-tnt-amber" : "text-black/50"}`}
+                style={{
+                  maskImage: `url(/icons/fleet/${slugify(t.name)}.svg)`,
+                  WebkitMaskImage: `url(/icons/fleet/${slugify(t.name)}.svg)`,
+                  maskRepeat: "no-repeat",
+                  WebkitMaskRepeat: "no-repeat",
+                  maskSize: "contain",
+                  WebkitMaskSize: "contain",
+                  maskPosition: "left center",
+                  WebkitMaskPosition: "left center",
+                }}
               />
               <span
                 aria-hidden="true"
-                className={`mt-2 block h-0.5 w-5 ${isActive ? "bg-tnt-amber" : "bg-black/20"}`}
+                className={`mt-2 block h-0.5 w-5 transition-colors group-hover:bg-tnt-amber group-focus-visible:bg-tnt-amber ${isActive ? "bg-tnt-amber" : "bg-black/20"}`}
               />
               <span
-                className={`mt-3 font-body text-sm lg:mt-2 lg:text-[13px] ${
-                  isActive ? "font-semibold text-black" : "text-black/60"
+                className={`mt-3 font-body text-sm transition-colors group-hover:text-white group-focus-visible:text-white lg:mt-2 lg:text-[13px] ${
+                  isActive ? "font-semibold text-white" : "text-black/60"
                 }`}
               >
                 {t.name}
               </span>
             </>
           );
-          const itemClassName =
-            "flex h-full w-full flex-col items-start px-6 py-8 text-left transition-colors hover:bg-white lg:px-6 lg:py-[clamp(0.75rem,2vh,1.5rem)] xl:px-8";
+          // ACTIVE = BLACK (2026-11-04, on request — "I can't see while
+          // auto-scrolling… make those button background colors black, not
+          // only while hovering"): the selected card (autoplay or hover) is
+          // black with a white number and name and a brand-yellow icon and
+          // dash, the same look as hover.
+          const itemClassName = `group flex h-full w-full flex-col items-start px-6 py-8 text-left transition-colors hover:bg-black focus-visible:bg-black lg:px-6 lg:py-[clamp(0.75rem,2vh,1.5rem)] xl:px-8 ${
+            isActive ? "bg-black" : ""
+          }`;
           return (
             <li
               key={t.name}

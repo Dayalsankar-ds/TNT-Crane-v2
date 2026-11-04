@@ -51,7 +51,7 @@ const BranchMap = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="aspect-[4/3] w-full animate-pulse rounded-2xl border border-black/10 bg-[#E9ECED] lg:aspect-[5/4] xl:absolute xl:inset-0 xl:aspect-auto xl:h-full xl:w-full" />
+      <div className="aspect-[4/3] w-full animate-pulse rounded-2xl border border-black/10 bg-white lg:aspect-[5/4] xl:absolute xl:inset-0 xl:aspect-auto xl:h-full xl:w-full" />
     ),
   },
 );

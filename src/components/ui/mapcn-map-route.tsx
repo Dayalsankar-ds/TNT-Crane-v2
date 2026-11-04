@@ -73,8 +73,12 @@ const THEME = {
   gold: "#F5A623",
   // Land must differ from the backdrop or the coastline disappears and the map
   // reads as a flat rectangle.
-  backdrop: "#EDEFF0", // tnt-paper — cool technical-paper base
-  land: "#F8F7F5", // warm near-white
+  // WHITE MAP (2026-11-04, on request — "the map section needs to be on a
+  // white background"): backdrop and land were light grays (#EDEFF0,
+  // #F8F7F5); both are white now. Water keeps its faint tint so coastlines
+  // still show against the white land.
+  backdrop: "#FFFFFF",
+  land: "#FFFFFF",
   water: "#DEE3E5", // barely-there cool tint, close to land on purpose
   road: "#D6D6D6", // faint — visible on close look, not competing with labels
   label: "#6B7280", // soft gray, legible without reading as primary content
@@ -399,7 +403,7 @@ export function BranchMap({
       ref={hostRef}
       role="application"
       aria-label="Map of TNT Crane & Rigging branches across the United States and Canada"
-      className={`tnt-map relative overflow-hidden rounded-2xl border border-black/10 bg-[#E9ECED] ${className}`}
+      className={`tnt-map relative overflow-hidden rounded-2xl border border-black/10 bg-white ${className}`}
     />
   );
 }
