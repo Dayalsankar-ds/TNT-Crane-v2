@@ -114,7 +114,7 @@ export default function SafetyCulture() {
         {/* Crew cut-out — THE USER'S OWN CUT-OUT, LARGER (2026-11-04, on
             request: "increase the size of that image … it does not match the
             background … edges look cut out"). public/photos/safety/
-            icare-crew-v2.webp is the 2000×938 transparent cut-out the user
+            icare-crew-v3.webp (1832×859, swapped in 2026-11-04 for v2, kept on disk) is the transparent cut-out the user
             supplied: cleaner edges than the Figma "image 3" PNG
             (icare-crew.png, kept on disk) and cropped tight to the four
             workers, with no tagline baked in. Sized ~12% larger than the
@@ -125,7 +125,7 @@ export default function SafetyCulture() {
             version the user chose to keep. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/photos/safety/icare-crew-v2.webp"
+          src="/photos/safety/icare-crew-v3.webp"
           alt="TNT crew in hard hats reviewing a lift plan together"
           className="absolute right-[-2%] bottom-[-4%] h-[82%] w-auto max-w-none lg:right-[-1.94%] lg:bottom-[-8.5%] lg:h-[70%]"
         />
