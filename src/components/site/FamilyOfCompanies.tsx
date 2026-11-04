@@ -28,69 +28,82 @@
 
 import Button from "./Button";
 
-/** `logoText`: words set beside the logo image, for a company shown as the
- *  TNT lockup plus a name rather than its own mark (TNT Canada). */
-const COMPANIES: { name: string; logo: string; logoText?: string; region: string; area: string }[] = [
-  // Added 2026-10-23, on request ("add TNT USA to the right-side logo
-  // listing"). Same treatment as TNT Canada below: no separate mark, so the
-  // TNT logo with "USA" beside it. Branches per branchLocatorData.ts ("TNT
-  // Crane & Rigging": 12 in Texas, 2 in Louisiana, 2 in Oklahoma). Moved to
-  // first place 2026-10-23, on request.
+/** Headings (`name`) and `location` are exactly as tntcrane.com's Family of
+ *  Companies carousel shows them, in its order (2026-11-04, on request); TNT
+ *  USA, which the live site doesn't list, stays first. Logos are this
+ *  project's own marks, not the live site's PNGs. TNT USA and TNT Canada both
+ *  use the plain TNT Crane & Rigging logo (the parent-company one on the
+ *  left), not the live site's red-boom TNT logo. `url` is each company's own
+ *  website as the live carousel links it; TNT USA links to tntcrane.com.
+ *  `area` is this project's coverage line, kept for the STATS count. */
+const COMPANIES: { name: string; logo: string; url: string; location: string; area: string; hidden?: boolean }[] = [
+  // Added 2026-10-23, on request. Branches per branchLocatorData.ts ("TNT
+  // Crane & Rigging": 12 in Texas, 2 in Louisiana, 2 in Oklahoma).
+  // Hidden 2026-11-04 to match the live site's five, then shown again the
+  // same day, on request ("Add that to the right side") — TNT Crane &
+  // Rigging's own US operation. Set `hidden: true` to hide it again (and
+  // recount STATS: TX, LA, OK leave with it → 11 states/provinces).
   {
-    name: "TNT Crane & Rigging USA",
+    name: "TNT USA",
     logo: "/brand/tnt.svg",
-    region: "South Central United States",
+    url: "https://tntcrane.com/",
+    location: "Houston, TX",
     area: "Texas, Louisiana, Oklahoma",
   },
   {
     name: "Southway Crane & Rigging",
     logo: "/brand/southway.svg",
-    region: "Southeastern United States",
+    url: "https://southwaycrane.com/",
+    location: "Atlanta, GA",
     area: "Georgia, Alabama, South Carolina, Florida",
   },
   {
     name: "RMS Cranes",
     logo: "/brand/rms-cranes.svg",
-    region: "Rocky Mountain Region",
+    url: "https://rmscranes.com/",
+    location: "Denver, CO",
     area: "Colorado, Wyoming, New Mexico",
-  },
-  {
-    name: "Eagle West Crane & Rigging",
-    logo: "/brand/eagle-west.svg",
-    region: "British Columbia",
-    area: "Western Canada",
   },
   {
     name: "JMS Crane & Rigging",
     logo: "/brand/jms.svg",
-    region: "Montana and South Dakota",
-    area: "Northern Rockies",
+    url: "https://jmscraneandrigging.com/",
+    location: "Billings, MT",
+    area: "Montana and South Dakota",
   },
-  // Added 2026-10-17, on request ("Add that TNT Logo with Canada text"). No
-  // TNT Canada mark exists in the brand files, so it's the TNT logo with
-  // "Canada" set beside it. Branches per branchLocatorData.ts ("TNT Crane &
-  // Rigging Canada": Brooks, Calgary, Edmonton, Fort McMurray, Lethbridge,
-  // Medicine Hat — all Alberta).
+  // Branches per branchLocatorData.ts ("TNT Crane & Rigging Canada": Brooks,
+  // Calgary, Edmonton, Fort McMurray, Lethbridge, Medicine Hat — all Alberta).
   {
-    name: "TNT Crane & Rigging Canada",
+    name: "TNT Canada",
     logo: "/brand/tnt.svg",
-    region: "Alberta",
+    url: "https://www.tntcrane.ca/",
+    location: "Alberta, Canada",
     area: "Calgary, Edmonton, Fort McMurray",
+  },
+  {
+    name: "Eagle West Crane & Rigging",
+    logo: "/brand/eagle-west.svg",
+    url: "https://www.eaglewestcranes.com/",
+    location: "British Columbia, Canada",
+    area: "Western Canada",
   },
 ];
 
-/** Family-specific figures, all counted from COMPANIES above. The design's
+/** The cards actually rendered: COMPANIES minus any marked `hidden`. */
+const VISIBLE = COMPANIES.filter((c) => !c.hidden);
+
+/** Family-specific figures, all counted from the visible COMPANIES above. The design's
  *  original four (700+ cranes, 45+ locations, 1,750+ employees, ACT 100
  *  No. 15) were replaced 2026-10-04, on request, because About Us
  *  (StorySlideshow.tsx) already shows every one of them. If a company or
  *  region changes above, recount these. */
 const STATS: { value: string; label: string }[] = [
-  { value: "6", label: "Regional operating companies" },
+  { value: String(VISIBLE.length), label: "Regional operating companies" },
   { value: "2", label: "Countries, US and Canada" },
   // GA, AL, SC, FL, CO, WY, NM, MT, SD, TX, LA, OK + British Columbia,
   // Alberta (JMS covers Montana and South Dakota per its own site —
   // corrected from Idaho 2026-10-08; Alberta added with TNT Canada
-  // 2026-10-17; TX, LA, OK added with TNT USA 2026-10-23)
+  // 2026-10-17; TX, LA, OK come with TNT USA — 11 if it's hidden again).
   { value: "14", label: "States and provinces covered" },
   { value: "1", label: "Shared fleet and iCARE safety program" },
 ];
@@ -158,7 +171,7 @@ export default function FamilyOfCompanies() {
         </div>
 
         <ul className="grid sm:grid-cols-2">
-          {COMPANIES.map((c, i) => {
+          {VISIBLE.map((c, i) => {
             // Dividers for any count, not just 2×2: a rule under every cell
             // except the last (stacked) or the last row (two columns), and a
             // vertical rule on a left-column cell only when it has a
@@ -171,7 +184,7 @@ export default function FamilyOfCompanies() {
             // minimum is gone, padding and the logo→caption gap are tighter,
             // and logos are a touch smaller, so the grid fits inside the left
             // panel's height again.
-            const n = COMPANIES.length;
+            const n = VISIBLE.length;
             const lastRowStart = n % 2 === 0 ? n - 2 : n - 1;
             const left = i % 2 === 0;
             // A company left alone on the last row (odd count — TNT Canada
@@ -190,26 +203,28 @@ export default function FamilyOfCompanies() {
                     : "sm:pl-10"
               } ${i < n - 1 ? "border-b border-black/15" : ""} ${i >= lastRowStart ? "sm:border-b-0" : ""}`}
             >
-              {c.logoText ? (
-                <div className={`flex items-center gap-3 self-start ${lone ? "sm:self-center" : ""}`}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={c.logo} alt="" className="h-11 w-auto object-contain sm:h-12" />
-                  <span className="font-display text-3xl leading-none text-black uppercase sm:text-[2.1rem]">
-                    {c.logoText}
-                  </span>
-                  <span className="sr-only">{c.name}</span>
-                </div>
-              ) : (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={c.logo} alt={c.name} className={`h-11 w-auto max-w-full self-start object-contain sm:h-12 ${lone ? "sm:self-center" : ""}`} />
-              )}
+              {/* The whole cell links to the company's own site, as each card
+                  does on tntcrane.com (added 2026-11-04). */}
+              <a
+                href={c.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`group flex flex-1 flex-col gap-6 rounded-sm outline-offset-8 focus-visible:outline-2 focus-visible:outline-tnt-amber ${lone ? "sm:items-center" : ""}`}
+              >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={c.logo} alt="" className={`h-11 w-auto max-w-full self-start object-contain sm:h-12 ${lone ? "sm:self-center" : ""}`} />
               <div className="mt-auto">
                 <p className="font-body text-xs font-normal tracking-[0.16em] text-black/55 uppercase">
                   A TNT Crane &amp; Rigging company
                 </p>
-                <p className="mt-2 font-body text-lg font-semibold text-black">{c.region}</p>
+                <h3 className="mt-2 font-display text-2xl leading-tight text-black uppercase transition-colors group-hover:text-tnt-amber">
+                  {c.name}
+                </h3>
+                <p className="mt-2 font-body text-lg font-semibold text-black">{c.location}</p>
                 <p className="mt-1 font-body text-base text-black/65">{c.area}</p>
+                <span className="sr-only"> (opens in a new tab)</span>
               </div>
+              </a>
             </li>
             );
           })}

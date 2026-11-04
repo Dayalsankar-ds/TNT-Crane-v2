@@ -203,8 +203,14 @@ export default function BranchLocator({ branches }: BranchLocatorData) {
   const selected = branches.find((b) => b.id === selectedId) ?? null;
 
   return (
-    <section id="coverage" className="scroll-mt-32 bg-white">
-      <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
+    <section id="coverage" className="scroll-mt-32 bg-tnt-gray">
+      {/* FULL WIDTH (2026-11-04, on request — "increase the width … remove
+          all the margin", map section first): no centred max-w-7xl box any
+          more. The content spans the page with the same side inset the
+          Services section uses (4.45vw — 64px at 1440), so the map lines up
+          with the full-bleed sections above instead of sitting in a 1280px
+          column with wide margins on big screens. */}
+      <div className="w-full px-4 py-20 sm:px-6 sm:py-28 lg:px-[4.45vw]">
         <div className="max-w-2xl">
           <p className="font-body text-[13px] font-bold tracking-[0.18em] text-tnt-amber uppercase">
             North American Coverage

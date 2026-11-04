@@ -1,6 +1,56 @@
-"use client";
-
 /**
+ * SERVICES — FIGMA "BUILT TO GET IT DONE" (2026-11-04, on request: "replace
+ * the current design with the Figma design for the service section"). Built
+ * from the "Section — Built to Get It Done" frame (node 1053:3043) of the TNT
+ * Figma file's "TNT Home screen" artboard:
+ *   - Left: "Services" eyebrow, "Built To / Get It Done." heading, intro
+ *     line, amber "Explore our services" button (→ /services), and the
+ *     "People. Equipment. Expertise. A Stronger Tomorrow." tagline.
+ *   - Right: 5 numbered rows, each a slanted photo, number, title, one-line
+ *     description and a round arrow button; "Built for What's Next." below.
+ *   - Text exactly as the design (on request — "Figma's 5, exact text"),
+ *     NOT services.ts's six-service catalog, so this section no longer reads
+ *     services.ts. The nav and /services page still use the catalog.
+ *   - Photos exported from the Figma file (on request) into
+ *     public/photos/services/figma-0N-*.jpg, resized to 1400px wide.
+ *   - FITS ONE SCREEN, ALL FIVE ROWS VISIBLE (2026-11-04, final, on request
+ *     — "I can't see the fifth engineering card … even though I have a
+ *     16-inch MacBook Pro"). From lg up the section is 100svh minus
+ *     --chrome-h (min 560px), the five rows share that height equally, and
+ *     row/heading type scales with viewport height. This supersedes the
+ *     sticky version described next: with the section exactly one screen
+ *     tall there's nothing to scroll past, so the sticky heading (still in
+ *     the markup, harmless) no longer visibly moves.
+ *   - BOTTOM WHITE SPACE (2026-11-04, on request — "add some white space
+ *     below the engineering card … I need to have some separation between
+ *     each section"): the section pads its own bottom (5vh, 24–56px; 48px
+ *     on phones) inside its one-screen height, so the last row and the
+ *     "Built for What's Next." tagline sit clear of About the Fleet below.
+ *     The same space was added at the top (same request, "all sections"):
+ *     About Us above ends on a full-bleed photo, so without it the rows
+ *     started 14px under that photo.
+ *   - (Superseded) LEFT SIDE PINS WHILE THE ROWS SCROLL (2026-11-04, on request — "the
+ *     left-side part … needs to be sticky to the top"; chosen option: "pin
+ *     while rows scroll"). From lg up the left column runs the full height
+ *     of the section and only its heading block (eyebrow, heading, intro,
+ *     button) is sticky, just under the fixed header; as the five 190px rows
+ *     scroll past, the heading holds in place and travels down until it
+ *     meets the "People. Equipment. Expertise." tagline at the column's
+ *     foot (fixed the same day, on request — the first version pinned the
+ *     whole screen-tall column, which only held for ~260px of scroll).
+ *     This replaced the earlier same-day "fit one screen" version (rows
+ *     sharing the screen height), which left nothing to scroll.
+ *   - Fonts stay Impact + Poppins per CLAUDE.md.
+ * Row links: the design names don't match the catalog one-to-one, so each
+ * row points at the closest /services entry: Crane Rental → its own page;
+ * Rigging → #specialized-rigging; Heavy Lift → #heavy-haul-transport;
+ * Industrial Services → #machinery-moving (its photo is a machinery move);
+ * Engineering → #lift-planning-engineering. Industrial Storage has no row.
+ * The previous 6-card version is kept below for history, and a copy of the
+ * file as it was is in the session scratchpad (CoreServices.before-figma.tsx).
+ *
+ * ── EARLIER HISTORY ─────────────────────────────────────────────────────
+
  * SECTION 5 — FULL-SCOPE CAPABILITY  (project lifecycle)
  *
  * 2026-10-09 — NOW READS services.ts, and every card links to its detail
@@ -73,183 +123,170 @@
  * (and this section's dark variant) was removed 2026-10-01, on request.
  */
 
-import Image from "next/image";
 import Link from "next/link";
-import { Eyebrow, Icon } from "./primitives";
 import Button from "./Button";
-import TargetHighlight from "./TargetHighlight";
-import { SERVICES, serviceHref, type ServiceId } from "./services";
 
-/** The verb each card carries — what that step DOES. Card content otherwise
- *  comes straight from services.ts, the site-wide catalog. */
-const STAGE_VERB: Record<ServiceId, string> = {
-  "crane-rental": "Lift",
-  "specialized-rigging": "Rig",
-  "machinery-moving": "Move",
-  "heavy-haul-transport": "Haul",
-  "lift-planning-engineering": "Plan",
-  "industrial-storage": "Store",
+type Row = {
+  index: string;
+  title: string;
+  text: string;
+  photo: string;
+  alt: string;
+  href: string;
 };
 
-export default function CoreServices() {
+const ROWS: Row[] = [
+  {
+    index: "01",
+    title: "Crane Rental",
+    text: "A modern fleet for projects of any size.",
+    photo: "/photos/services/figma-01-crane-rental.jpg",
+    alt: "TNT all-terrain crane set up beside a glass office building",
+    href: "/services/crane-rental",
+  },
+  {
+    index: "02",
+    title: "Rigging",
+    text: "Engineered solutions for complex lifts.",
+    photo: "/photos/services/figma-02-rigging.jpg",
+    alt: "TNT hydraulic gantry lifting a concrete vault off a trailer",
+    href: "/services#specialized-rigging",
+  },
+  {
+    index: "03",
+    title: "Heavy Lift",
+    text: "Proven capability for the toughest challenges.",
+    photo: "/photos/services/figma-03-heavy-lift.jpg",
+    alt: "Large crawler crane rigged for a heavy lift at an industrial plant",
+    href: "/services#heavy-haul-transport",
+  },
+  {
+    index: "04",
+    title: "Industrial Services",
+    text: "Keeping industry moving forward.",
+    photo: "/photos/services/figma-04-industrial-services.jpg",
+    alt: "TNT forklift unloading a large wrapped component from a trailer",
+    href: "/services#machinery-moving",
+  },
+  {
+    index: "05",
+    title: "Engineering",
+    text: "Lift planning and engineering for safer, smarter outcomes.",
+    photo: "/photos/services/figma-05-engineering.jpg",
+    alt: "All-terrain crane setting a bridge girder over a river",
+    href: "/services#lift-planning-engineering",
+  },
+];
 
+/** The design's slanted photo frame (top edge shifted right, bottom left). */
+const SLANT = "polygon(6% 0, 100% 0, 94% 100%, 0 100%)";
+
+export default function CoreServices() {
   return (
     <section
       id="services"
-      className="scroll-mt-32 bg-white text-black"
+      className="scroll-mt-[var(--chrome-h)] bg-white pb-12 text-black lg:h-[calc(100svh-var(--chrome-h))] lg:min-h-[560px] lg:pt-[clamp(1.5rem,5vh,3.5rem)] lg:pb-[clamp(1.5rem,5vh,3.5rem)]"
     >
-      {/* Marks the stage the nav's deep link asked for. Now that each stage is
-          its own row the scroll also lands correctly, but the highlight still
-          answers "which one did I click?" on arrival. */}
-      <TargetHighlight selector=".svc-tile" />
-
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
-        {/* ── Section header ───────────────────────────────────────────── */}
-        <div className="max-w-3xl">
-          <Eyebrow>Full-Scope Capability</Eyebrow>
-          <h2
-            className="mt-3 font-display text-4xl leading-[0.95] tracking-tight uppercase sm:text-5xl text-black"
-          >
-            One Partner, End to End
-          </h2>
-        </div>
-
-        {/* ── Stages 01–06 — the grid ──────────────────────────────────── */}
-        {/* Still an <ol>: the six read 01→06 across rows, so the order is real
-            and assistive tech should hear "1 of 6" rather than a pile of cards.
-            The lifecycle lives in the STAGE labels and numbering rather than
-            in a drawn spine or a featured lead card — a 3-across grid has no
-            single path to trace, and no card is bigger than another.
-            Equal heights come from the grid + `h-full` + column flex, not from
-            trimming the copy. */}
-        <ol className="mt-10 grid gap-4 sm:mt-12 sm:grid-cols-2 lg:grid-cols-3">
-          {SERVICES.map((s) => (
-            <li
-              key={s.id}
-              id={s.id}
-              className="svc-tile group relative scroll-mt-32"
-            >
-              {/* No shadow at any state. Depth comes from the hairline border
-                  going gold, a barely-there gold wash, and a 2px lift — enough
-                  to register as interactive without a drop shadow. */}
-              <article
-                className="relative flex h-full flex-col rounded-xl border p-5 transition-[translate,border-color,background-color] duration-300 ease-out group-hover:-translate-y-0.5 group-hover:border-tnt-amber group-hover:bg-tnt-amber/[0.06] focus-within:border-tnt-amber sm:p-6 border-black/12 bg-black/[0.03]"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  {/* Icon well — solid gold square + black icon (2026-10-26, on
-                      request; was a 10% gold tint with a gold icon, too faint
-                      on the light card). Hover flips to black square + gold
-                      icon. */}
-                  <span
-                    className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-tnt-amber text-black transition-colors duration-300 group-hover:bg-black group-hover:text-tnt-amber"
-                  >
-                    <Image
-                      src={s.glyph}
-                      alt=""
-                      width={24}
-                      height={24}
-                      unoptimized
-                      className="h-6 w-6 object-contain transition-[filter] duration-300 [filter:brightness(0)] group-hover:[filter:brightness(0)_saturate(100%)_invert(63%)_sepia(65%)_saturate(721%)_hue-rotate(352deg)_brightness(97%)_contrast(101%)]"
-                    />
-                  </span>
-                  <span className="flex items-center gap-2 pt-1">
-                    <span
-                      className="font-body text-[11px] tabular-nums transition-colors duration-300 group-hover:text-tnt-amber text-black/30"
-                    >
-                      {s.index}
-                    </span>
-                    <span className="font-body text-[10px] font-bold tracking-[0.2em] text-tnt-amber uppercase">
-                      {STAGE_VERB[s.id]}
-                    </span>
-                  </span>
-                </div>
-
-                <h3
-                  className="mt-5 font-display text-xl tracking-wide uppercase text-black"
-                >
-                  {s.label}
-                </h3>
-                {/* flex-1 pushes the CTA to a common baseline across the row,
-                    so blurbs of different lengths still align. */}
-                <p
-                  className="mt-2 flex-1 font-body text-[13px] leading-relaxed text-black/60"
-                >
-                  {s.short}
-                </p>
-
-                {/* Hairline separator instead of a shadow to divide the card's
-                    body from its action. */}
-                <span
-                  aria-hidden="true"
-                  className="mt-5 block h-px w-full transition-colors duration-300 group-hover:bg-tnt-amber/40 bg-black/10"
-                />
-
-                {/* Learn more — the whole card is the hit area via the stretched
-                    link, so this is the affordance, not the target. */}
-                <span
-                  className="mt-4 flex items-center gap-2 font-body text-sm font-semibold transition-colors duration-300 group-hover:text-tnt-amber text-black"
-                >
-                  Learn more
-                  <Icon
-                    name="arrow"
-                    className="h-4 w-4 text-tnt-amber transition-transform duration-300 group-hover:translate-x-1"
-                  />
-                </span>
-
-                {/* Stretched link: one focusable element per card, full-card hit
-                    area, and a real focus ring — a div with onClick would give
-                    none of those.
-                    Crane Rental is the one exception: `s.href` points at its
-                    own dedicated page (/crane-rental) instead of the shared
-                    quote-form anchor every other stage still uses. <Link>,
-                    not a plain <a> — a plain <a> forced a full page reload
-                    instead of Next's client-side route swap (measured via
-                    `performance.getEntriesByType("navigation")[0].type`). */}
-                <Link
-                  href={serviceHref(s)}
-                  className="absolute inset-0 rounded-xl focus-visible:ring-2 focus-visible:ring-tnt-amber focus-visible:ring-offset-2 focus-visible:outline-none"
-                >
-                  <span className="sr-only">
-                    {s.label} — stage {s.index}, {STAGE_VERB[s.id]}. Learn more.
-                  </span>
-                </Link>
-              </article>
-            </li>
-          ))}
-        </ol>
-
-        {/* ── Closing CTA ──────────────────────────────────────────────── */}
-        {/* Solid amber fill — the site's standard bg-tnt-amber + text-black
-            pairing (same convention as the nav CTA, active chips, etc.).
-            Buttons drop `onDark` since the fill itself is light — primary/
-            secondary "light" skins (black fill / black outline) are what
-            read on amber.
-            SINGLE CTA (2026-09-30, on request — "remove that talk to
-            engineer from the strip banner"): "Talk to an engineer" (the
-            secondary #contact button) removed; "Request a quote" is now the
-            panel's only action.
-            BLACK PANEL (2026-10-26, on request): black background, gold
-            heading, white subtext, and the gold onDark button — was a gold
-            panel with black text and a black button. */}
-        <div className="mt-12 overflow-hidden rounded-2xl bg-black sm:mt-14">
-          <div className="flex flex-col gap-7 p-8 sm:p-10 lg:flex-row lg:items-center lg:justify-between lg:p-12">
-            <div>
-              <p className="font-display text-2xl leading-tight tracking-wide text-tnt-amber uppercase sm:text-3xl lg:text-4xl">
-                One partner.
-                <br />
-                From lift planning to final set.
-              </p>
-              <p className="mt-3 max-w-lg font-body text-sm leading-relaxed text-white sm:text-base">
-                Tell us the load, the site, and the window. We&rsquo;ll scope the
-                rest.
-              </p>
-            </div>
-            <div className="flex flex-col gap-3 sm:flex-row lg:shrink-0">
-              <Button href="#quote" variant="primary" onDark>
-                Request a quote
+      <div className="grid lg:h-full lg:grid-cols-[36%_1fr]">
+        {/* ── LEFT — statement ─────────────────────────────────────── */}
+        <div className="flex flex-col justify-between px-4 pt-14 pb-8 sm:px-6 lg:min-h-0 lg:py-[clamp(1rem,4vh,3rem)] lg:pr-10 lg:pl-[4.45vw]">
+          {/* Sticky heading block: the left column stretches the full height
+              of the section, so this block holds just under the header
+              while the rows scroll, and travels down until it meets the
+              "People. Equipment. Expertise." tagline at the column's foot. */}
+          {/* Wrapper = the sticky block's track. It ends above the tagline,
+              so the heading stops just short of it instead of sliding over. */}
+          <div className="lg:flex-1">
+          <div className="lg:sticky lg:top-[calc(var(--chrome-h)+2.5rem)]">
+            <p className="flex items-center gap-3 font-body text-[13px] font-bold tracking-[0.18em] text-black uppercase">
+              <span aria-hidden="true" className="h-0.5 w-6 bg-tnt-amber" />
+              Services
+            </p>
+            <h2 className="mt-4 font-display text-5xl leading-[1.02] text-black uppercase sm:text-6xl lg:mt-[1.6vh] lg:text-[min(4.15vw,3.75rem,6.2vh)]">
+              Built To
+              <br />
+              <span className="text-tnt-amber">Get It Done.</span>
+            </h2>
+            <p className="mt-5 max-w-md font-body text-base leading-relaxed text-tnt-body lg:mt-[1.8vh] lg:text-[min(1.0625rem,2vh)]">
+              From equipment rental to engineered solutions, we provide the
+              expertise to keep your projects moving forward.
+            </p>
+            {/* Black fill (2026-11-04, on request — "needs to be in black"):
+                Button's primary-on-light skin, black with white text; was the
+                design's amber (primary-on-dark). */}
+            <div className="mt-7 lg:mt-[3vh]">
+              <Button href="/services" variant="primary" className="px-6 py-3.5 tracking-[0.06em] uppercase">
+                Explore our services
               </Button>
             </div>
           </div>
+
+          </div>
+
+          <p className="mt-6 hidden items-start gap-3 font-body text-xs leading-relaxed tracking-[0.12em] text-black/70 uppercase lg:flex">
+            <span aria-hidden="true" className="mt-2 h-0.5 w-6 shrink-0 bg-tnt-amber" />
+            <span>
+              People. Equipment. Expertise.
+              <br />A Stronger Tomorrow.
+            </span>
+          </p>
+        </div>
+
+        {/* ── RIGHT — the five service rows ─────────────────────────── */}
+        <div className="flex flex-col lg:min-h-0 lg:py-[clamp(0.5rem,1.6vh,1.25rem)]">
+          <ul className="flex flex-col divide-y divide-black/10 border-t border-black/10 lg:min-h-0 lg:flex-1 lg:border-t-0">
+            {ROWS.map((r) => (
+              <li key={r.index} className="lg:min-h-0 lg:flex-1">
+                <Link
+                  href={r.href}
+                  className="group grid h-full grid-cols-1 gap-5 px-4 py-6 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-tnt-amber sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center lg:gap-[4%] lg:py-[1.1vh] lg:pr-[clamp(1.5rem,4vw,4.5rem)] lg:pl-0"
+                >
+                  {/* Slanted photo with the design's thin dark outline: a
+                      black slanted plate with the photo clipped 1px inside. */}
+                  <div
+                    className="relative aspect-[3/1] bg-black/80 lg:aspect-auto lg:h-full lg:min-h-[72px]"
+                    style={{ clipPath: SLANT }}
+                  >
+                    <div className="absolute inset-px overflow-hidden" style={{ clipPath: SLANT }}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={r.photo}
+                        alt={r.alt}
+                        loading="lazy"
+                        className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-5 lg:gap-[clamp(1rem,2.5vw,2.75rem)]">
+                    <span className="font-display text-5xl leading-none text-[#7c8794] lg:text-[clamp(2rem,5.6vh,3.25rem)]">
+                      {r.index}
+                    </span>
+                    <div className="min-w-0 flex-1 pt-1">
+                      <span aria-hidden="true" className="block h-0.5 w-5 bg-tnt-amber" />
+                      <h3 className="mt-2 font-display text-2xl leading-tight text-black uppercase transition-colors group-hover:text-tnt-amber group-focus-visible:text-tnt-amber lg:text-[clamp(1.1rem,2.7vh,1.5rem)]">
+                        {r.title}
+                      </h3>
+                      <p className="mt-1 max-w-[16rem] font-body text-sm leading-snug text-tnt-body lg:text-[clamp(0.8rem,1.6vh,0.9375rem)]">
+                        {r.text}
+                      </p>
+                    </div>
+                    <span
+                      aria-hidden="true"
+                      className="mt-auto flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-black/15 text-lg text-black transition-colors group-hover:border-black group-hover:bg-black group-hover:text-white group-focus-visible:border-black group-focus-visible:bg-black group-focus-visible:text-white lg:h-[clamp(2.25rem,5vh,3rem)] lg:w-[clamp(2.25rem,5vh,3rem)]"
+                    >
+                      →
+                    </span>
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          <p className="flex items-center gap-3 px-4 py-6 font-body text-xs tracking-[0.12em] text-black/70 uppercase sm:px-6 lg:py-[clamp(0.5rem,1.4vh,1rem)] lg:pl-[4%]">
+            <span aria-hidden="true" className="h-0.5 w-6 bg-tnt-amber" />
+            Built for What&apos;s Next.
+          </p>
         </div>
       </div>
     </section>

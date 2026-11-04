@@ -1,4 +1,27 @@
 /**
+ * FIGMA REDESIGN, LIGHT THEME (2026-11-04, on request) — rebuilt from the
+ * "Section — About the Fleet" frame (node 1053:3067) of the TNT Figma file's
+ * "TNT Home screen" artboard, with the design's dark theme turned light:
+ *   - Text exactly as the design: eyebrow "About the Fleet", heading "The
+ *     Right Equipment. For Every Lift.", the 3-to-900-tons paragraph, the
+ *     700+ Cranes / Up To 900 Tons stats, the photo's side words (People,
+ *     Equipment, Expertise, Safer Outcomes / Built For A Higher Standard).
+ *   - Photo: the design's own dusk tower-crane image, exported from Figma to
+ *     public/photos/fleet/fleet-cover-tower-crane-dusk.jpg. It's the
+ *     section's cover until autoplay or a visitor picks a crane type; after
+ *     that the photo swaps per type, as before (on request — "Swap the
+ *     photo"). The design's black diagonal panel is white here, with a
+ *     softer translucent band beside it, so the dark photo still meets the
+ *     light panel on the design's slant.
+ *   - The 6-type crane strip runs along the bottom, numbered 01–06 as in the
+ *     design; the active one is gold.
+ *   - Fonts stay Impact + Poppins per CLAUDE.md, not the design's own.
+ *   - BUTTON LINKS ARE TEMPORARY: "Explore the Fleet" scrolls to the crane
+ *     strip and "View Load Charts" opens /load-chart/all-terrain-cranes until
+ *     the user decides where they go.
+ *
+ * Everything below is the section's earlier history, kept for context.
+ *
  * ABOUT THE FLEET (2026-09-13, on request) — replaces the "Rigging &
  * Attachments" card-grid + compare-modal section entirely, with content
  * matching tntcrane.com's own "About the Fleet" homepage section, restyled
@@ -90,19 +113,86 @@ import { Eyebrow, Icon } from "./primitives";
 import { slugify } from "./navigation";
 import { FLEET_TYPES } from "./fleetTypes";
 
+/** The Figma design's own photo, shown until a crane type takes over. */
+const COVER_PHOTO = "/photos/fleet/fleet-cover-tower-crane-dusk.jpg";
+
+/** WIDE PHOTOS FOR THIS SECTION ONLY (2026-11-04, on request — "it needs to
+ *  fit inside the frame… like the hydraulic truck crane image"). The photo
+ *  frame here is a wide landscape (≈1.9:1 at 1440×900, wider on short
+ *  screens), and its left third sits under the white panel, so each type
+ *  needs a wide shot with the crane right of centre. fleetTypes.ts's photos
+ *  didn't all suit that (All-Terrain and Crawler are tall portraits, so only
+ *  ~30–36% of them showed), so this section keeps its own list; fleetTypes.ts
+ *  is untouched because /load-chart/all-terrain-cranes uses its real TNT
+ *  All-Terrain photo as that page's header. Hydraulic Truck keeps the real
+ *  TNT photo; the other five are free-licence stock (Unsplash / Pexels),
+ *  downloaded into public/photos/fleet/stock-*.jpg and checked by eye in the
+ *  frame's own crop:
+ *    - All-Terrain: Unsplash photo-1781356857510-0be2172fecc1
+ *    - Crawler:     Unsplash photo-1685800567880-18ce2108fbfb
+ *    - Rough-Terrain: Pexels 32122653 (ACE rough-terrain crane)
+ *    - Carry Deck:  Pexels 31477030 (ACE pick-and-carry crane — the closest
+ *                   free stock match; no true carry-deck photo was found)
+ *    - Tower:       Pexels 4170185 (tower cranes over a high-rise under
+ *                   construction) — replaced the first pick, a plain
+ *                   crane-against-sky shot (Unsplash photo-1617105990241-
+ *                   454f3d104824, kept as stock-tower-crane-old-unsplash.jpg),
+ *                   on request 2026-11-04.
+ *  The earlier photos are still on disk (all-terrain-crane.jpg,
+ *  crawler-crane.jpg) and in photos.ts. */
+const SECTION_PHOTOS: Record<
+  string,
+  {
+    src: string;
+    isStock: boolean;
+    /** Desktop placement override (replaces the default lg:left-[15%]
+     *  lg:w-[85%]) for a photo that needs to sit wholly right of the panel. */
+    frameClass?: string;
+    /** object-position, for where the crop lands. */
+    position?: string;
+  }
+> = {
+  "All-Terrain Cranes": { src: "/photos/fleet/stock-all-terrain-crane.jpg", isStock: true },
+  "Crawler Cranes": { src: "/photos/fleet/stock-crawler-crane.jpg", isStock: true },
+  "Hydraulic Truck Cranes": { src: "/photos/fleet/hydraulic-truck-crane.jpg", isStock: false },
+  "Rough-Terrain Cranes": { src: "/photos/fleet/stock-rough-terrain-crane.jpg", isStock: true },
+  "Carry Deck Cranes": { src: "/photos/fleet/stock-carry-deck-crane.jpg", isStock: true },
+  // TOWER CRANES — the user's own image (2026-11-04, on request: "check the
+  // folder from TNT that I have used for the previous code… pick one that
+  // matches the tower crane"). The only tower crane in ~/TNT's projects:
+  // tower-cranes.png (already in this project, identical to the copy in
+  // "Back up combined"), a TNT-branded tower crane at sunset over a city
+  // skyline. It's square with the mast left of centre, so on desktop it sits
+  // only in the area right of the white panel, cropped from 30% down, which
+  // keeps the mast, cab, jib, hook and skyline all in view. Not tagged
+  // "Stock photo" — it's the user's own asset — but note fleetTypes.ts /
+  // photos.ts's earlier finding that this PNG set looks AI-generated, so it
+  // isn't a photo of a real TNT crane either. Previous picks are still on
+  // disk: stock-tower-crane.jpg (Pexels 4170185) and
+  // stock-tower-crane-old-unsplash.jpg.
+  "Tower Cranes": {
+    src: "/photos/fleet/tower-cranes.png",
+    isStock: false,
+    frameClass: "lg:left-[46%] lg:w-[54%] xl:left-[34.5%] xl:w-[65.5%]",
+    position: "50% 30%",
+  },
+};
+const photoFor = (name: string) => SECTION_PHOTOS[name] ?? { src: "", isStock: false };
+
+const SIDE_WORDS_TOP = ["People", "Equipment", "Expertise", "Safer Outcomes"];
+const SIDE_WORDS_BOTTOM = ["Built", "For A", "Higher", "Standard"];
+
 export default function EquipmentGuide() {
-  // Single-photo slideshow — same shape as StorySlideshow.tsx's autoplay:
-  // 4s cadence, off while the section is out of view or reduced-motion is
-  // on, and any manual pick (clicking a label) restarts the 4s window
-  // rather than getting immediately overridden by an in-flight timer.
+  // Autoplay, same shape as before (and as StorySlideshow.tsx): 4s cadence,
+  // off while the section is out of view, under reduced motion, or while a
+  // crane type is hovered; any manual pick restarts the 4s window. The first
+  // tick (or the first hover/click) retires the cover photo; after that each
+  // tick advances to the next crane type.
   const [activeType, setActiveType] = useState(0);
-  const galleryRef = useRef<HTMLDivElement>(null);
+  const [showCover, setShowCover] = useState(true);
+  const sectionRef = useRef<HTMLElement>(null);
   const inViewRef = useRef(false);
   const reducedMotionRef = useRef(false);
-  // Hovering a label pauses the 4s autoplay (2026-09-29, on request —
-  // "shall we make that changes into while hovering"): without this, the
-  // photo you just hovered to preview could get yanked away mid-look by the
-  // next autoplay tick. Resumes the moment the pointer leaves the list.
   const hoveringRef = useRef(false);
 
   useEffect(() => {
@@ -112,7 +202,7 @@ export default function EquipmentGuide() {
   }, []);
 
   useEffect(() => {
-    const el = galleryRef.current;
+    const el = sectionRef.current;
     if (!el) return;
     const io = new IntersectionObserver(
       ([entry]) => {
@@ -127,206 +217,247 @@ export default function EquipmentGuide() {
   useEffect(() => {
     if (reducedMotionRef.current) return;
     const id = setInterval(() => {
-      if (inViewRef.current && !hoveringRef.current) {
-        setActiveType((i) => (i + 1) % FLEET_TYPES.length);
-      }
+      if (!inViewRef.current || hoveringRef.current) return;
+      if (showCover) setShowCover(false);
+      else setActiveType((i) => (i + 1) % FLEET_TYPES.length);
     }, 4000);
     return () => clearInterval(id);
-  }, [activeType]);
+  }, [activeType, showCover]);
 
-  const selectType = useCallback((i: number) => setActiveType(i), []);
+  const selectType = useCallback((i: number) => {
+    setShowCover(false);
+    setActiveType(i);
+  }, []);
+
+  const active = FLEET_TYPES[activeType];
 
   return (
-    <section id="fleet-guide" className="bg-[#f7f7f7] text-black">
-      {/* Lighter grey (2026-10-26, on request — "the background gray seems
-          too high"): #f7f7f7, the same grey as the Full-Scope Capability
-          cards and the About Us stat panel, instead of bg-tnt-gray
-          (#eeeeee). Every other grey section followed the same day
-          (Safety, Request Quote, About, Services, Contact, Crane Rental). */}
-      <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8">
-        {/* TWO-SIDE LAYOUT (2026-09-18, on request: "divide that section in
-            two, A side and B side — A side is left side which needs to
-            have content, B side needs to have image"): the whole section
-            is now one lg:grid-cols-2 row — side A (heading, paragraphs,
-            the label list, and the capacity-chart button) on the left,
-            side B (just the photo) on the right. Replaces the previous
-            stacked layout (full-width text block, then a separate
-            list+photo row below it). DOM order is content-then-photo, so
-            mobile stacks the same way (content first, image below) rather
-            than needing `order-*` utilities to reorder anything. */}
-        <div ref={galleryRef} className="grid gap-10 lg:grid-cols-2 lg:items-stretch lg:gap-16">
-          {/* ── SIDE A — content ─────────────────────────────────────── */}
-          <div className="flex flex-col">
-            <Eyebrow>About the Fleet</Eyebrow>
-            <h2 className="mt-4 font-display text-5xl leading-[0.95] tracking-tight text-black uppercase sm:text-6xl">
-              A modern fleet of
-              <br />
-              more than 700 cranes
-            </h2>
+    <section
+      id="fleet-guide"
+      ref={sectionRef}
+      className="scroll-mt-[var(--chrome-h)] bg-tnt-gray text-black lg:flex lg:h-[calc(100svh-var(--chrome-h))] lg:min-h-[560px] lg:flex-col"
+    >
+      {/* ONE SCREEN TALL ON DESKTOP (2026-11-04, on request — "the user does
+          not need to scroll to check the information for a section"): from
+          lg up the section is exactly the viewport minus the fixed header
+          (--chrome-h), the top area takes whatever the crane strip leaves,
+          and the copy's spacing and heading size scale with viewport height
+          so it all fits on a short laptop screen as well as a tall monitor.
+          Below 560px of height it stops shrinking and scrolls instead. */}
+      {/* ── TOP AREA — copy on a white diagonal panel over the photo ──── */}
+      <div className="relative flex flex-col overflow-hidden lg:min-h-0 lg:flex-1 lg:flex-row lg:items-start">
+        {/* Photo stack. Below lg it sits under the copy as its own block;
+            from lg up it fills the area behind the copy's white panel. */}
+        <div className="relative order-2 aspect-16/9 bg-black lg:absolute lg:inset-0 lg:aspect-auto">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={COVER_PHOTO}
+            alt="Tower crane lit up at dusk over a city construction site"
+            aria-hidden={!showCover}
+            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-out lg:left-[15%] lg:w-[85%] ${
+              showCover ? "opacity-100" : "opacity-0"
+            }`}
+          />
+          {FLEET_TYPES.map((t, i) => {
+            const photo = photoFor(t.name);
+            return (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                key={t.name}
+                src={photo.src}
+                alt={t.name}
+                aria-hidden={showCover || i !== activeType}
+                loading="lazy"
+                style={photo.position ? { objectPosition: photo.position } : undefined}
+                className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-out ${
+                  photo.frameClass ?? "lg:left-[15%] lg:w-[85%]"
+                } ${!showCover && i === activeType ? "opacity-100" : "opacity-0"}`}
+              />
+            );
+          })}
+          {/* Darken the photo slightly so the white side words stay legible
+              on the lighter crane photos too. */}
+          <div aria-hidden="true" className="absolute inset-0 bg-black/25" />
 
-            {/* Condensed to one paragraph (2026-09-29, on request — "can we
-                reduce this content"): was two paragraphs, the first an
-                itemized equipment list (gantry lift systems, jack & slide
-                systems, machinery skates, etc.). Still links "Specialized
-                Rigging"/"Machinery Moving"/"Industrial Storage" out to those
-                service pages — same-page anchors to CoreServices.tsx's own
-                stage cards (identical slugs: `slugify("Specialized
-                Rigging")` etc.), since those are the real equivalent
-                sections on THIS site. */}
-            <p className="mt-6 font-body text-base leading-relaxed text-tnt-body">
-              TNT Crane &amp; Rigging also offers an extended fleet of{" "}
-              <a
-                href="#specialized-rigging"
-                className="font-semibold text-tnt-amber underline-offset-2 hover:underline"
-              >
-                Specialized Rigging
-              </a>{" "}
-              equipment, expert{" "}
-              <a
-                href="#machinery-moving"
-                className="font-semibold text-tnt-amber underline-offset-2 hover:underline"
-              >
-                Machinery Moving
-              </a>
-              , and secure{" "}
-              <a
-                href="#industrial-storage"
-                className="font-semibold text-tnt-amber underline-offset-2 hover:underline"
-              >
-                Industrial Storage
-              </a>{" "}
-              — from precision equipment relocation to complex rigging in
-              tight spaces, handled with the same efficiency and care as
-              everything else we do.
-            </p>
+          {/* The design's two diagonal panels, light: a solid white one and
+              a translucent band beside it. Desktop only — below lg the copy
+              sits above the photo instead of over it. */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 hidden bg-tnt-gray/35 lg:block lg:[clip-path:polygon(0_0,62%_0,55%_100%,0_100%)] xl:[clip-path:polygon(0_0,53.5%_0,44.5%_100%,0_100%)]"
+          />
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 hidden bg-tnt-gray lg:block lg:[clip-path:polygon(0_0,52%_0,46%_100%,0_100%)] xl:[clip-path:polygon(0_0,41%_0,34.5%_100%,0_100%)]"
+          />
 
-            {/* Label list — hover to preview, click to jump (click matters
-                on touch, where hover doesn't fire). Active state also
-                driven by the 4s autoplay above, paused while a label is
-                hovered (see `hoveringRef`). Keeps each type's slugified
-                `id` so navigation.ts's Fleet panel deep links still land on
-                something real.
-                HOVER-TO-PREVIEW (2026-09-29, on request — "shall we make
-                that changes into while hovering"): `onMouseEnter` calls the
-                same `selectType` the click handler does — hovering and
-                clicking aren't two different actions, hovering just fires
-                it sooner, on any device with a real pointer.
-                ALL-TERRAIN LINKS OUT (2026-09-29, on request — "if user
-                clicked All terrain from 'About the Fleet' it needs to take
-                the dedicated page"): every other label just swaps the
-                slideshow photo in place, but All-Terrain Cranes is the one
-                type with its own real page
-                (/load-chart/all-terrain-cranes — 46 real models, searchable
-                and filterable), so its label is a `Link` there instead of a
-                `selectType` button — hovering it still previews its photo,
-                same as the rest, before you click through. Same visual
-                treatment either way (icon + label, active-state ring), so
-                the row doesn't visually call out which one behaves
-                differently until you click it. */}
-            <ul
-              className="mt-8 flex flex-col gap-2"
-              onMouseEnter={() => {
-                hoveringRef.current = true;
-              }}
-              onMouseLeave={() => {
-                hoveringRef.current = false;
-              }}
-            >
-              {FLEET_TYPES.map((t, i) => {
-                const isActive = i === activeType;
-                const content = (
-                  <>
-                    <Icon
-                      name={t.icon}
-                      className={`h-8 w-8 shrink-0 ${
-                        isActive ? "text-tnt-amber" : "text-black/40"
-                      }`}
-                      strokeWidth={1.5}
-                    />
-                    <span
-                      className={`font-body text-base font-semibold ${
-                        isActive ? "text-black" : "text-black/60"
-                      }`}
-                    >
-                      {t.name}
-                    </span>
-                  </>
-                );
-                const itemClassName = `flex w-full items-center gap-4 rounded-xl border px-5 py-4 text-left transition-colors ${
-                  isActive
-                    ? "border-tnt-amber bg-tnt-amber/10"
-                    : "border-transparent hover:border-black/10"
-                }`;
-
-                return (
-                  <li key={t.name} id={slugify(t.name)} className="scroll-mt-32">
-                    {t.name === "All-Terrain Cranes" ? (
-                      <Link
-                        href="/load-chart/all-terrain-cranes"
-                        onMouseEnter={() => selectType(i)}
-                        className={itemClassName}
-                      >
-                        {content}
-                      </Link>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => selectType(i)}
-                        onMouseEnter={() => selectType(i)}
-                        aria-current={isActive ? "true" : undefined}
-                        className={itemClassName}
-                      >
-                        {content}
-                      </button>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
+          {/* Side words, on the photo (desktop only, as decoration). */}
+          <div aria-hidden="true" className="absolute top-9 right-10 hidden font-body text-sm leading-6 text-white lg:block">
+            {SIDE_WORDS_TOP.map((w) => (
+              <p key={w}>{w}</p>
+            ))}
+            <span className="mt-2 block h-0.5 w-6 bg-tnt-amber" />
+          </div>
+          <div aria-hidden="true" className="absolute right-10 bottom-10 hidden text-right font-body text-sm leading-6 text-white lg:block">
+            {SIDE_WORDS_BOTTOM.map((w) => (
+              <p key={w}>{w}</p>
+            ))}
           </div>
 
-          {/* ── SIDE B — photo ───────────────────────────────────────── */}
-          {/* Every type's <img> stacked in the same box, crossfading via
-              opacity so there's no layout shift between them.
-              `lg:aspect-3/4`: a real portrait aspect ratio (on request,
-              "a true tall/portrait shape"), not a height borrowed from
-              `items-stretch`. `object-cover` on the <img>s below crops
-              each (landscape-sourced) photo to fill it. Below `lg` (where
-              side A stacks above this instead of sitting beside it) it
-              keeps the original 4:3 / 16:10 landscape aspect ratios —
-              portrait only reads as intentional next to a column beside
-              it, not stacked full-width under one. */}
-          <div className="relative aspect-4/3 overflow-hidden rounded-2xl border border-black/10 bg-white sm:aspect-16/10 lg:aspect-3/4 lg:self-start">
-            {FLEET_TYPES.map((t, i) => (
-              <div
-                key={t.name}
-                aria-hidden={i !== activeType}
-                className={`absolute inset-0 transition-opacity duration-700 ease-out ${
-                  i === activeType ? "opacity-100" : "opacity-0"
-                }`}
-                style={{ backgroundImage: t.gradient }}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={t.photo}
-                  alt={t.name}
-                  loading={i === 0 ? "eager" : "lazy"}
-                  className="absolute inset-0 h-full w-full object-cover"
-                />
-                {/* Honesty tag, not a design flourish — see the docblock's
-                    "3 REAL + 3 STOCK" note. A generic Unsplash photo and an
-                    actual TNT jobsite photo are different claims; this is
-                    the one place on the card that says which is which. */}
-                {!t.isRealFleetPhoto && (
-                  <span className="absolute top-3 right-3 rounded-full bg-black/60 px-2.5 py-1 font-body text-[10px] tracking-[0.1em] text-white/80 uppercase backdrop-blur-sm">
-                    Stock photo
-                  </span>
-                )}
+          {/* Honesty tag for the stand-in stock photos (see fleetTypes.ts). */}
+          {!showCover && photoFor(active.name).isStock && (
+            <span className="absolute top-3 right-3 rounded-full bg-black/60 px-2.5 py-1 font-body text-[10px] tracking-[0.1em] text-white/80 uppercase backdrop-blur-sm lg:top-auto lg:right-auto lg:bottom-6 lg:left-[47%]">
+              Stock photo
+            </span>
+          )}
+        </div>
+
+        {/* Copy */}
+        {/* COPY ALIGNED TO THE PANEL, NOT A CENTRED CONTAINER (2026-11-04, on
+            request — text ran over the photo on wide screens, with empty
+            space on the left). The white panel is drawn as a share of the
+            full width, so from lg up the copy is too: full-bleed, a left
+            inset of 5.75vw (the design's 83px at 1440) and a width that
+            always ends inside the panel's slanted edge. lg (1024–1279px) gets
+            a wider panel and column so the heading still fits; xl and up use
+            the design's own proportions. */}
+        <div className="relative z-10 order-1 w-full px-4 py-16 sm:px-6 sm:py-20 lg:w-[42%] lg:pt-[clamp(0.75rem,calc(10vh_-_54px),3.5rem)] lg:pb-[clamp(0.75rem,2.5vh,3.5rem)] lg:pr-6 lg:pl-[5.75vw] xl:w-[35%]">
+          <div className="max-w-md lg:max-w-none">
+            <Eyebrow className="flex items-center gap-3">
+              <span aria-hidden="true" className="h-0.5 w-6 bg-tnt-amber" />
+              About the Fleet
+            </Eyebrow>
+            <h2 className="mt-5 font-display text-5xl leading-[1.02] text-black uppercase sm:text-6xl lg:mt-[1.4vh] lg:text-[min(4.15vw,3.75rem,5.6vh)]">
+              The Right
+              <br />
+              Equipment.
+              <br />
+              <span className="text-tnt-amber">For Every Lift.</span>
+            </h2>
+            <p className="mt-6 font-body text-base leading-relaxed text-tnt-body sm:text-lg lg:mt-[2vh] lg:text-[min(1.125rem,2.1vh)] lg:leading-normal">
+              A modern, well-maintained fleet of 700+ cranes and specialized
+              equipment, ready to take on projects of any size — from 3 to 900
+              tons.
+            </p>
+
+            <dl className="mt-8 flex items-center gap-6 lg:mt-[2.4vh]">
+              <div>
+                <dt className="sr-only">Cranes</dt>
+                <dd>
+                  <span className="block font-display text-4xl leading-none text-black lg:text-[min(2.25rem,4.2vh)]">700+</span>
+                  <span className="mt-1.5 block font-body text-sm text-black/60">Cranes</span>
+                </dd>
               </div>
-            ))}
+              <span aria-hidden="true" className="h-14 w-px bg-black/20" />
+              <div>
+                <dt className="sr-only">Lifting capacity</dt>
+                <dd>
+                  <span className="block font-body text-sm text-black/60">Up To</span>
+                  <span className="mt-1 block font-display text-4xl leading-none text-black lg:text-[min(2.25rem,4.2vh)]">900 Tons</span>
+                  <span className="mt-1.5 block font-body text-sm text-black/60">Lifting Capacity</span>
+                </dd>
+              </div>
+            </dl>
+
+            {/* TEMPORARY hrefs — see the docblock. */}
+            <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-4 lg:mt-[2.8vh] lg:flex-nowrap lg:gap-x-5">
+              <a
+                href="#fleet-types"
+                className="inline-flex items-center gap-3 border border-black bg-black px-6 py-3.5 font-body text-[15px] font-semibold whitespace-nowrap text-white transition-colors hover:border-tnt-amber hover:bg-tnt-amber hover:text-black lg:px-5 lg:py-[clamp(0.6rem,1.5vh,0.875rem)] lg:text-sm"
+              >
+                Explore the Fleet <span aria-hidden="true">→</span>
+              </a>
+              <Link
+                href="/load-chart/all-terrain-cranes"
+                className="inline-flex items-center gap-3 font-body text-[15px] font-semibold whitespace-nowrap text-black lg:text-sm transition-colors hover:text-tnt-amber"
+              >
+                View Load Charts <span aria-hidden="true" className="text-tnt-amber">→</span>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* ── CRANE CLASSES STRIP ──────────────────────────────────────────
+          Hover to preview, click to jump (click matters on touch). Each
+          item keeps its slugified `id` so navigation.ts's Fleet panel deep
+          links still land on something real. All-Terrain Cranes links to
+          its own load-chart page; the rest swap the photo in place. */}
+      <ul
+        id="fleet-types"
+        className="grid shrink-0 scroll-mt-32 grid-cols-2 border-t border-black/10 bg-[#f7f7f7] sm:grid-cols-3 lg:grid-cols-6"
+        onMouseEnter={() => {
+          hoveringRef.current = true;
+        }}
+        onMouseLeave={() => {
+          hoveringRef.current = false;
+        }}
+      >
+        {FLEET_TYPES.map((t, i) => {
+          const isActive = i === activeType;
+          const content = (
+            <>
+              <span
+                className={`font-display text-2xl leading-none lg:text-xl ${
+                  isActive ? "text-tnt-amber" : "text-black/35"
+                }`}
+              >
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <Icon
+                name={t.icon}
+                className={`mt-4 h-9 w-9 lg:mt-2.5 lg:h-7 lg:w-7 ${isActive ? "text-tnt-amber" : "text-black/50"}`}
+                strokeWidth={1.5}
+              />
+              <span
+                aria-hidden="true"
+                className={`mt-2 block h-0.5 w-5 ${isActive ? "bg-tnt-amber" : "bg-black/20"}`}
+              />
+              <span
+                className={`mt-3 font-body text-sm lg:mt-2 lg:text-[13px] ${
+                  isActive ? "font-semibold text-black" : "text-black/60"
+                }`}
+              >
+                {t.name}
+              </span>
+            </>
+          );
+          const itemClassName =
+            "flex h-full w-full flex-col items-start px-6 py-8 text-left transition-colors hover:bg-white lg:px-6 lg:py-[clamp(0.75rem,2vh,1.5rem)] xl:px-8";
+          return (
+            <li
+              key={t.name}
+              id={slugify(t.name)}
+              className={`scroll-mt-32 border-black/10 ${i > 0 ? "lg:border-l" : ""} ${
+                i % 2 === 1 ? "border-l sm:border-l-0" : ""
+              } ${i % 3 !== 0 ? "sm:border-l" : ""} ${i >= 2 ? "border-t sm:border-t-0" : ""} ${
+                i >= 3 ? "sm:border-t lg:border-t-0" : ""
+              }`}
+            >
+              {t.name === "All-Terrain Cranes" ? (
+                <Link
+                  href="/load-chart/all-terrain-cranes"
+                  onMouseEnter={() => selectType(i)}
+                  onFocus={() => selectType(i)}
+                  className={itemClassName}
+                >
+                  {content}
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => selectType(i)}
+                  onMouseEnter={() => selectType(i)}
+                  aria-pressed={isActive}
+                  className={itemClassName}
+                >
+                  {content}
+                </button>
+              )}
+            </li>
+          );
+        })}
+      </ul>
     </section>
   );
 }

@@ -363,6 +363,11 @@ body {
    selected or hovered pin, so 47 logos never pile up when zoomed out. Like
    the dot, it's pointer-events: none: purely visual, so it can't widen the
    button's hit-box and re-trigger the hover flapping described above. */
+/* Logo only, no white tag (2026-11-04, on request — "remove that white
+   background and keep only the logo"). The box, padding and box-shadow are
+   gone; a drop-shadow that follows the logo's own outline keeps it legible
+   over light and dark map areas, and the logo is a touch larger to make up
+   for losing the tag. */
 .tnt-marker__logo {
   position: absolute;
   bottom: calc(100% + 4px);
@@ -370,10 +375,6 @@ body {
   translate: -50% 4px;
   display: flex;
   align-items: center;
-  padding: 5px 8px;
-  border-radius: 6px;
-  background: #ffffff;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
   opacity: 0;
   pointer-events: none;
   transition:
@@ -382,9 +383,10 @@ body {
 }
 .tnt-marker__logo img {
   display: block;
-  height: 18px;
+  height: 24px;
   width: auto;
-  max-width: 96px;
+  max-width: 120px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
 }
 .tnt-marker.is-selected .tnt-marker__logo,
 .tnt-marker.is-hovered .tnt-marker__logo {

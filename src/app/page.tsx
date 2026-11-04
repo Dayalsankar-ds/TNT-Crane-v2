@@ -27,6 +27,7 @@ import EquipmentGuide from "@/components/site/EquipmentGuide";
 import CoreServices from "@/components/site/CoreServices";
 import CoverageMap from "@/components/site/CoverageMap";
 import SafetyCulture from "@/components/site/SafetyCulture";
+import LatestNews from "@/components/site/LatestNews";
 import ContactSection from "@/components/site/ContactSection";
 import RequestQuote from "@/components/site/RequestQuote";
 
@@ -121,6 +122,10 @@ export default function Home() {
 
         {/* Trust — iCARE safety program */}
         <SafetyCulture />
+
+        {/* Latest From TNT — news cards, white (Figma, added 2026-11-04,
+            on request, directly after Safety). */}
+        <LatestNews />
 
         {/* Convert — the dark finale */}
         <ContactSection /> {/* reach a human */}
