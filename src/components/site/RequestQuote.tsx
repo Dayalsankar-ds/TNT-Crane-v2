@@ -182,7 +182,7 @@ export default function RequestQuote() {
   };
 
   return (
-    <section id="quote" className="relative scroll-mt-[var(--chrome-h)] overflow-clip bg-white text-black">
+    <section id="quote" className="relative scroll-mt-[var(--chrome-h)] overflow-clip bg-tnt-gray text-black">
       {/* ── PHOTO + WHITE PANELS (desktop) ─────────────────────────── */}
       <div aria-hidden="true" className="absolute inset-0 hidden lg:block">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -191,8 +191,8 @@ export default function RequestQuote() {
           alt=""
           className="absolute inset-y-0 right-0 left-[14%] h-full w-[86%] object-cover"
         />
-        <div className="absolute inset-0 bg-white/50 [clip-path:polygon(0_0,79.44%_0,54.78%_100%,0_100%)]" />
-        <div className="absolute inset-0 bg-white [clip-path:polygon(0_0,68.82%_0,43.96%_100%,0_100%)]" />
+        <div className="absolute inset-0 bg-tnt-gray/50 [clip-path:polygon(0_0,79.44%_0,54.78%_100%,0_100%)]" />
+        <div className="absolute inset-0 bg-tnt-gray [clip-path:polygon(0_0,68.82%_0,43.96%_100%,0_100%)]" />
         <div className="absolute top-[clamp(2rem,6vh,3.5rem)] right-[5%] font-body text-sm leading-6 font-medium text-white [text-shadow:0_1px_6px_rgba(0,0,0,0.5)]">
           <p>People</p>
           <p>Equipment</p>

@@ -203,7 +203,7 @@ export default function BranchLocator({ branches }: BranchLocatorData) {
   const selected = branches.find((b) => b.id === selectedId) ?? null;
 
   return (
-    <section id="coverage" className="scroll-mt-32 bg-tnt-gray">
+    <section id="coverage" className="scroll-mt-32 bg-white">
       {/* FULL WIDTH (2026-11-04, on request — "increase the width … remove
           all the margin", map section first): no centred max-w-7xl box any
           more. The content spans the page with the same side inset the

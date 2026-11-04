@@ -28,7 +28,6 @@ import CoreServices from "@/components/site/CoreServices";
 import CoverageMap from "@/components/site/CoverageMap";
 import SafetyCulture from "@/components/site/SafetyCulture";
 import LatestNews from "@/components/site/LatestNews";
-import ContactSection from "@/components/site/ContactSection";
 import RequestQuote from "@/components/site/RequestQuote";
 
 /**
@@ -128,7 +127,9 @@ export default function Home() {
         <LatestNews />
 
         {/* Convert — the dark finale */}
-        <ContactSection /> {/* reach a human */}
+        {/* "Reach the nearest team" (ContactSection) removed from the
+            homepage 2026-11-04, on request. The component file is kept; to
+            bring it back, re-import it and put `<ContactSection />` here. */}
         <RequestQuote /> {/* request a quote */}
     </div>
   );
