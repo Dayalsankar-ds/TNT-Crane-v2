@@ -207,7 +207,7 @@ export default function RequestQuote() {
         </div>
       </div>
 
-      <div className="relative grid gap-12 px-4 py-20 sm:px-6 sm:py-24 lg:grid-cols-[minmax(0,26rem)_minmax(0,34rem)] lg:gap-[2.4vw] lg:px-[4.45vw] lg:py-16">
+      <div className="relative grid gap-12 px-4 py-20 sm:px-6 sm:py-24 lg:grid-cols-[minmax(0,24rem)_minmax(0,1fr)] lg:gap-[2.4vw] xl:grid-cols-[minmax(0,1fr)_minmax(0,min(44rem,48vw))_minmax(0,1fr)] lg:px-[4.45vw] lg:py-16">
         {/* ── LEFT — statement ─────────────────────────────────────── */}
         {/* STICKY STATEMENT (2026-11-04, on request — "the content … needs
             to act as sticky-at-the-top … travel along with the form"): the
