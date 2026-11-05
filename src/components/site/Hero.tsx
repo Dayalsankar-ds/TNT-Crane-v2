@@ -195,13 +195,35 @@ import { getLenis } from "@/components/SmoothScroll";
 import { CHROME_H } from "@/components/site/chrome";
 import { hashTarget, scrollToElement } from "@/components/site/scrollToElement";
 
-const VIDEO_SRC = "/video/hero.mp4";
-const POSTER_SRC = "/video/hero-poster.webp";
+/* NEW FIRST HALF, PENDING CLIENT SIGN-OFF (2026-11-05, on request — "Don't
+ * delete the previous one … we need to get a confirmation from the client"):
+ * hero-v2.mp4 swaps the first half for "First half video.mp4" (10s, 30fps,
+ * 1278×720), sped up to 1.8s so it takes the same time as the old first
+ * half, then crossfades (0.25s, xfade=fade) into the OLD second half,
+ * taken unchanged from hero.mp4 (frame 100 on — the original second-clip
+ * source is gone, and its speed curve is already baked in there). Same
+ * format as hero.mp4: 1920×1080, 60fps, H.264 CRF 26, +faststart; 3.15s
+ * total (was 3.27s). Encoded with:
+ *
+ *   ffmpeg -i "First half video.mp4" -i hero.mp4 -filter_complex \
+ *     "[0:v]setpts=(PTS-STARTPTS)*1.8/10,fps=60,scale=1920:1080:flags=lanczos,
+ *      setsar=1,format=yuv420p[a];[1:v]trim=start_frame=100,
+ *      setpts=PTS-STARTPTS,fps=60,setsar=1,format=yuv420p[b];
+ *      [a][b]xfade=transition=fade:duration=0.25:offset=1.55,format=yuv420p[v]" \
+ *     -map "[v]" -an -c:v libx264 -preset slow -crf 26 -profile:v high \
+ *     -level 4.2 -movflags +faststart hero-v2.mp4
+ *
+ * hero-v2-poster.webp is its first frame; frames-v12 is every frame of it
+ * (1024px, WebP q55). TO GO BACK to the old video, restore these three
+ * values: hero.mp4 / hero-poster.webp / frames-v11 with FRAME_COUNT 196.
+ * All old files are still on disk. */
+const VIDEO_SRC = "/video/hero-v2.mp4";
+const POSTER_SRC = "/video/hero-v2-poster.webp";
 
 /** Fallback frame sequence — see AUTOPLAY BLOCKED above. Every frame of
- *  hero.mp4 (60fps), so it has the same timing, speed changes included. */
-const FRAME_DIR = "/video/frames-v11";
-const FRAME_COUNT = 196;
+ *  hero-v2.mp4 (60fps), so it has the same timing, speed changes included. */
+const FRAME_DIR = "/video/frames-v12";
+const FRAME_COUNT = 189;
 const FRAME_FPS = 60;
 const FRAME_DURATION = 1000 / FRAME_FPS;
 const FRAMES_TOTAL_MS = FRAME_COUNT * FRAME_DURATION;
