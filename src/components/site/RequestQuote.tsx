@@ -121,7 +121,7 @@ export function Opt() {
 /** Figma input look: grey filled box, no border until focus. */
 const fField =
   "w-full rounded-md border border-transparent bg-[#ececee] px-4 py-3 font-body text-base text-black placeholder:text-black/40 focus:border-tnt-amber focus:bg-white focus:ring-1 focus:ring-tnt-amber focus:outline-none";
-const fLabel = "block font-body text-[13px] font-semibold text-black";
+const fLabel = "block font-body text-[15px] font-semibold text-black";
 
 function Star() {
   return (
@@ -316,7 +316,7 @@ export default function RequestQuote() {
 
             <fieldset className="mt-7 border-t border-black/10 pt-6">
               <legend className="sr-only">Project details (optional)</legend>
-              <p aria-hidden="true" className="font-body text-sm font-semibold text-black">
+              <p aria-hidden="true" className="font-body text-base font-semibold text-black">
                 More about the job <span className="font-normal text-black/45">(optional)</span>
               </p>
               <div className="mt-5 grid gap-5 sm:grid-cols-2">
@@ -352,9 +352,9 @@ export default function RequestQuote() {
               {/* Attach row, in the design's "@ Attach Files" style. */}
               <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
                 <label htmlFor="q-file" className="flex cursor-pointer items-start gap-2.5">
-                  <span aria-hidden="true" className="mt-0.5 font-body text-sm font-semibold text-black">@</span>
+                  <span aria-hidden="true" className="mt-0.5 font-body text-[15px] font-semibold text-black">@</span>
                   <span>
-                    <span className="block font-body text-sm font-semibold text-black">Attach a file</span>
+                    <span className="block font-body text-[15px] font-semibold text-black">Attach a file</span>
                     <span className="block font-body text-xs text-black/55">Plans, drawings or site photos (optional)</span>
                   </span>
                 </label>
