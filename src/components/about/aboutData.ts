@@ -73,7 +73,15 @@ export const MILESTONES: Milestone[] = [
     chapter: "Different names. One TNT.",
     place: "United States & Canada",
     body: "Six regional identities, one connected organization, and now one website, so every customer can see the whole family behind their local crew.",
-    logos: [],
+    // The whole family (2026-11-12, on request — "show all the logos").
+    // TNT Canada shares TNT's logo, so TNT's mark stands for both.
+    logos: [
+      { src: "/brand/tnt.svg", alt: "TNT Crane & Rigging" },
+      { src: "/brand/southway.svg", alt: "Southway Crane & Rigging" },
+      { src: "/brand/eagle-west.svg", alt: "Eagle West Crane & Rigging" },
+      { src: "/brand/rms-cranes.svg", alt: "RMS Cranes" },
+      { src: "/brand/jms.svg", alt: "JMS Crane & Rigging" },
+    ],
   },
 ];
 

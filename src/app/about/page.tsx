@@ -5,9 +5,8 @@ import { Eyebrow, Heading } from "@/components/site/primitives";
 import ScrollButton from "@/components/about/ScrollButton";
 import HashScroll from "@/components/about/HashScroll";
 import Timeline from "@/components/about/Timeline";
-import FamilyProfiles from "@/components/about/FamilyProfiles";
+import FamilyBento from "@/components/about/FamilyBento";
 import CapabilityExplorer from "@/components/about/CapabilityExplorer";
-import { PARENT } from "@/components/about/aboutData";
 
 /**
  * /about — TNT's story, the family of companies, combined capability, reach
@@ -26,10 +25,12 @@ import { PARENT } from "@/components/about/aboutData";
  * skips its autoplay when the homepage is opened with a #hash, so these land
  * where they say.
  *
- * HERO IMAGE: /photos/about/about-hero-crawler-sunset.webp is 02.png from
- * the supplied TNT/Image folder (chosen on request). By inspection it's a
- * rendered still from the hero-video storyboard, not a photograph of a real
- * job — so its alt text describes the scene without claiming a project.
+ * HERO IMAGE: /photos/fleet/fleet-cover-tower-crane-dusk.jpg — the tower
+ * crane at dusk under a dark, cloudy sky (2026-11-12, on request: the user
+ * sent their reference About hero and said "Images are not same"). It's the
+ * same file About the Fleet (EquipmentGuide.tsx) uses as its cover. The
+ * previous image, /photos/about/about-hero-crawler-sunset.webp (02.png from
+ * the supplied TNT/Image folder, a rendered storyboard still), stays on disk.
  */
 
 export const metadata: Metadata = {
@@ -111,24 +112,26 @@ export default function AboutPage() {
             hairline. */}
         <div className="relative order-2 aspect-[16/10] lg:absolute lg:inset-y-0 lg:right-0 lg:left-[32%] lg:aspect-auto">
           <Image
-            src="/photos/about/about-hero-crawler-sunset.webp"
-            alt="TNT crawler crane lifting a precast load across a construction site at sunset"
+            src="/photos/fleet/fleet-cover-tower-crane-dusk.jpg"
+            alt="Tower crane lit up against a dark, cloudy evening sky over a construction site"
             fill
             priority
             sizes="(min-width: 1024px) 68vw, 100vw"
-            className="object-cover object-[30%_50%]"
+            className="object-cover object-[65%_50%]"
           />
           <div aria-hidden="true" className="absolute inset-y-0 -left-0.5 hidden w-[calc(42%+2px)] lg:block" style={{ backgroundImage: easedFade("to right") }} />
           <div aria-hidden="true" className="absolute inset-x-0 -top-0.5 h-[calc(45%+2px)] lg:hidden" style={{ backgroundImage: easedFade("to bottom") }} />
         </div>
 
-        <div className="relative z-10 order-1 flex flex-col justify-center px-6 py-16 sm:px-10 sm:py-20 lg:w-[46%] lg:px-16 xl:px-20">
+        <div className="relative z-10 order-1 flex flex-col justify-center px-4 py-16 sm:px-6 sm:py-20 lg:w-[46%] lg:px-[4.45vw]">
           <p className="flex items-center gap-4 font-body text-[13px] font-bold tracking-[0.18em] text-tnt-amber uppercase">
             <span aria-hidden="true" className="h-px w-9 bg-tnt-amber" />
             About TNT Crane &amp; Rigging
           </p>
           <h1 id="about-hero-heading" className="mt-8 font-display text-5xl leading-[1.02] text-white uppercase sm:text-6xl xl:text-7xl">
-            Built on local expertise.
+            Built on
+            <br />
+            local expertise.
             <br />
             <span className="text-tnt-amber">United by strength.</span>
           </h1>
@@ -142,119 +145,108 @@ export default function AboutPage() {
               Explore Our Story
             </ScrollButton>
           </div>
-          {/* TNT Canada mark (2026-10-16, on request). No separate TNT Canada
-              logo file exists, so it's the TNT logo with a CANADA label — the
-              same treatment as TNT Canada in the Family selector. */}
-          <div className="mt-12 flex w-fit flex-col items-center gap-2">
-            <Image src="/brand/tnt.svg" alt="TNT Crane & Rigging Canada" width={160} height={58} className="h-12 w-auto" />
-            <span aria-hidden="true" className="font-body text-xs font-bold tracking-[0.3em] text-white uppercase">
-              Canada
-            </span>
-          </div>
+          {/* TNT Canada mark removed from the hero 2026-11-12, on request. */}
         </div>
       </section>
 
       {/* 02 — OUR STORY + TIMELINE */}
-      <section id="our-story" aria-labelledby="our-story-heading" className="scroll-mt-32 bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
-          <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-20">
-            <div>
-              <Eyebrow>Our Journey</Eyebrow>
-              <Heading className="mt-4 text-5xl leading-[0.95] sm:text-6xl">
-                <span id="our-story-heading">
-                  Four decades of
-                  <br />
-                  lifting what matters.
-                </span>
-              </Heading>
-              <div className="mt-8 max-w-xl space-y-5 font-body text-lg leading-relaxed text-black/70">
-                <p>
-                  TNT Crane &amp; Rigging was founded in 1985 in Houston, Texas. In the decades that
-                  followed, it grew through regional expansion and strategic acquisitions.
-                </p>
-                <p>
-                  Established regional businesses became part of the wider TNT family, keeping the
-                  names, crews and customer relationships their regions know. Their expertise,
-                  combined with TNT&apos;s fleet, engineering and safety program, makes up TNT&apos;s
-                  North American presence today.
-                </p>
-              </div>
-            </div>
-            <div className="relative mx-auto aspect-[4/5] w-full max-w-md overflow-hidden rounded-xl lg:max-w-none">
-              <Image
-                src="/photos/tnt-crawler-bridge-lift.jpg"
-                alt="TNT crawler crane setting bridge girders between concrete piers"
-                fill
-                sizes="(min-width: 1024px) 40vw, 90vw"
-                className="object-cover"
-              />
+      {/* SPLIT LAYOUT WITH A SLANTED PHOTO (2026-11-12, on request — "Follow
+          this design on our journey section"): text on the left inside the
+          usual 7xl container; the photo runs full-height to the right edge
+          from ~56% of the width, its left edge slanted (clip-path, 56% at
+          the top → ~59% at the bottom, as in the reference). Second heading
+          line in brand yellow. The photo is the red crawler crane setting
+          bridge girders (public/photos/safety/icare-bridge-girder-crawler.jpg,
+          also iCARE's); tnt-crawler-bridge-lift.jpg, the old rounded-card
+          image here, stays on disk. Below lg the photo stacks under the
+          text, unslanted. */}
+      <section
+        id="our-story"
+        aria-labelledby="our-story-heading"
+        className="relative scroll-mt-32 overflow-hidden bg-white"
+      >
+        <div className="px-4 py-20 sm:px-6 sm:py-28 lg:flex lg:min-h-[clamp(34rem,72vh,44rem)] lg:items-center lg:px-[4.45vw]">
+          <div className="lg:w-[54%] lg:pr-10 xl:w-[52%]">
+            <Eyebrow>Our Journey</Eyebrow>
+            <Heading className="mt-4 text-5xl leading-[0.95] sm:text-6xl">
+              <span id="our-story-heading">
+                Four decades of
+                <br />
+                <span className="text-tnt-amber">lifting what matters.</span>
+              </span>
+            </Heading>
+            <div className="mt-8 max-w-xl space-y-5 font-body text-lg leading-relaxed text-black/70">
+              <p>
+                TNT Crane &amp; Rigging was founded in 1985 in Houston, Texas. In the decades that
+                followed, it grew through regional expansion and strategic acquisitions.
+              </p>
+              <p>
+                Established regional businesses became part of the wider TNT family, keeping the
+                names, crews and customer relationships their regions know. Their expertise,
+                combined with TNT&apos;s fleet, engineering and safety program, makes up TNT&apos;s
+                North American presence today.
+              </p>
             </div>
           </div>
         </div>
-      </section>
-
-      {/* 02b — TIMELINE ("The route so far"), its own grey band so it reads
-          apart from the white story above. */}
-      <section aria-label="TNT timeline" className="bg-[#f7f7f7]">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
-          <Timeline />
+        <div className="relative aspect-[16/10] w-full lg:absolute lg:inset-y-0 lg:right-0 lg:left-[55.6%] lg:aspect-auto lg:w-auto lg:[clip-path:polygon(0_0,100%_0,100%_100%,8.2%_100%)]">
+          <Image
+            src="/photos/safety/icare-bridge-girder-crawler.jpg"
+            alt="TNT crawler crane setting bridge girders over a highway interchange"
+            fill
+            sizes="(min-width: 1024px) 45vw, 100vw"
+            className="object-cover object-[80%_50%]"
+          />
         </div>
       </section>
 
       {/* 03 — FAMILY OF COMPANIES */}
+      {/* BENTO GRID (2026-11-12, on request): replaces the parent-company
+          card + FamilyProfiles (branch lists per company) + "Find Our
+          Locations" button — see FamilyBento.tsx. FamilyProfiles.tsx and
+          PARENT in aboutData.ts stay on disk, unused here. */}
       <section id="family-of-companies" aria-labelledby="family-heading" className="scroll-mt-32 bg-[#f5f4f0]">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
-          <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end lg:gap-20">
+        <div className="px-4 pt-20 pb-16 sm:px-6 sm:pt-28 sm:pb-20 lg:px-[4.45vw] lg:pb-0">
+          <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end lg:gap-20">
             <div>
               <Eyebrow>The TNT Family</Eyebrow>
               <Heading className="mt-4 text-5xl leading-[0.95] sm:text-6xl">
                 <span id="family-heading">
                   Different names.
                   <br />
-                  One TNT.
+                  <span className="text-tnt-amber">One TNT.</span>
                 </span>
               </Heading>
-              <p className="mt-6 max-w-xl font-body text-lg leading-relaxed text-black/70">
-                Regional companies with deep local roots, each still known by the name its customers
-                trust, and all backed by the fleet, engineering and iCARE safety program of TNT Crane
-                &amp; Rigging.
-              </p>
             </div>
-
-            {/* Parent company */}
-            <div className="rounded-xl bg-black p-8 text-white sm:p-10">
-              <div className="flex flex-wrap items-center gap-6">
-                <Image src={PARENT.logo} alt={PARENT.name} width={220} height={80} className="h-16 w-auto" />
-                <div className="border-l border-white/15 pl-6">
-                  <p className="font-body text-xs font-semibold tracking-[0.16em] text-white/50 uppercase">
-                    {PARENT.relationship}
-                  </p>
-                  <p className="mt-1 font-body text-base text-white">{PARENT.base}</p>
-                </div>
-              </div>
-              <p className="mt-6 font-body text-base leading-relaxed text-white/75">{PARENT.story}</p>
-              <p className="mt-4 font-body text-sm text-white/60">
-                <span className="font-semibold text-white">{PARENT.region}</span> · Branches including{" "}
-                {PARENT.locations.join(", ")}
-              </p>
-            </div>
+            <p className="max-w-xl font-body text-lg leading-relaxed text-black/70 lg:justify-self-end">
+              Regional companies with deep local roots, each still known by the name its customers
+              trust, and all backed by the fleet, engineering and iCARE safety program of TNT Crane
+              &amp; Rigging.
+            </p>
           </div>
-
-          <div className="mt-14">
-            <FamilyProfiles />
+          <div className="mt-12">
+            <FamilyBento />
           </div>
+        </div>
+      </section>
 
-          <div className="mt-10">
-            <Button href="/#coverage" variant="primary">
-              Find Our Locations
-            </Button>
-          </div>
+      {/* 03b — TIMELINE ("The route so far"). MOVED BELOW THE FAMILY BENTO
+          (2026-11-12, on request — "don't give any extra spaces above and
+          below it"): it shares the family band's off-white so the two read
+          as one block. On desktop the timeline's own sticky frame is a full
+          viewport tall with its content centred, which already leaves room
+          above and below — so the family section's bottom padding and this
+          section's padding are both dropped at lg, instead of stacking on
+          top of that. */}
+      <section aria-label="TNT timeline" className="bg-[#f5f4f0]">
+        <div className="px-4 pb-20 sm:px-6 sm:pb-24 lg:px-[4.45vw] lg:pb-0">
+          <Timeline />
         </div>
       </section>
 
       {/* 04 — INTEGRATED CAPABILITIES */}
       <section id="capabilities" aria-labelledby="capabilities-heading" className="scroll-mt-32 bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
+        <div className="px-4 py-20 sm:px-6 sm:py-28 lg:px-[4.45vw]">
           <div className="max-w-2xl">
             <Eyebrow>What We Do</Eyebrow>
             <Heading className="mt-4 text-5xl leading-[0.95] sm:text-6xl">
@@ -283,7 +275,7 @@ export default function AboutPage() {
 
       {/* 05 — NORTH AMERICAN REACH */}
       <section id="our-reach" aria-labelledby="reach-heading" className="scroll-mt-32 bg-[#f5f4f0] text-black">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
+        <div className="px-4 py-20 sm:px-6 sm:py-28 lg:px-[4.45vw]">
           <div className="grid gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-20">
             <div>
               <Eyebrow>Our Footprint</Eyebrow>
@@ -363,7 +355,7 @@ export default function AboutPage() {
 
       {/* 06 — SAFETY & iCARE */}
       <section id="safety" aria-labelledby="safety-heading" className="scroll-mt-32 bg-[#f7f7f7]">
-        <div className="mx-auto grid max-w-7xl gap-12 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-20 lg:px-8">
+        <div className="grid gap-12 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-20 lg:px-[4.45vw]">
           <div className="flex items-center justify-center rounded-xl bg-white p-10 sm:p-14">
             <Image
               src="/brand/icare-badge.png"
@@ -409,7 +401,7 @@ export default function AboutPage() {
 
       {/* 07 — FINAL CTA */}
       <section id="work-with-us" aria-labelledby="cta-heading" className="scroll-mt-32 bg-tnt-amber">
-        <div className="mx-auto flex max-w-7xl flex-col gap-10 px-4 py-20 sm:px-6 sm:py-24 lg:flex-row lg:items-end lg:justify-between lg:px-8">
+        <div className="flex flex-col gap-10 px-4 py-20 sm:px-6 sm:py-24 lg:flex-row lg:items-end lg:justify-between lg:px-[4.45vw]">
           <div className="max-w-2xl">
             <p className="font-body text-[13px] font-bold tracking-[0.18em] text-black/70 uppercase">Let&apos;s Work Together</p>
             <h2 id="cta-heading" className="mt-4 font-display text-5xl leading-[0.95] tracking-wide text-black uppercase sm:text-6xl">

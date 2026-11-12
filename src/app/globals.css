@@ -524,3 +524,11 @@ html {
     transform: none;
   }
 }
+
+/* About page FamilyBento logo marquee (2026-11-12): the logo list is
+   rendered twice side by side, so sliding by half its width loops
+   seamlessly. */
+@keyframes tnt-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
