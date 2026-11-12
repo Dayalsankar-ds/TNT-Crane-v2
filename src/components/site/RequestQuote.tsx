@@ -141,31 +141,35 @@ const FEATURES: { title: string; text: string; icon: "clock" | "gear" | "shield"
   { title: "Safe & Reliable", text: "Backed by the TNT family of companies.", icon: "shield" },
 ];
 
-/** The design's own 24px gold line icons (exported from Figma). */
+/** FILLED ICONS ON BLACK (2026-11-12, on request — "filled yellow icon with
+ *  dark bg"): solid brand-yellow shapes with their details cut out in the
+ *  black of the badge behind them. Replaces the design's 24px gold line
+ *  icons (exported from Figma) inside an amber-outlined circle. */
+const ICON_Y = "#F8AE1C";
+const ICON_D = "#000000";
+
 function FeatureIcon({ name }: { name: "clock" | "gear" | "shield" }) {
   return (
     <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="h-6 w-6">
       {name === "clock" && (
         <>
-          <circle cx="12" cy="12" r="10.2" stroke="#F8AE1C" strokeWidth="1.6" />
-          <path d="M12 6V12L17 14" stroke="#F8AE1C" strokeWidth="1.6" />
+          <circle cx="12" cy="12" r="11" fill={ICON_Y} />
+          <path d="M12 5.5V12L16.5 14.5" stroke={ICON_D} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </>
       )}
       {name === "gear" && (
         <>
-          <circle cx="12" cy="12" r="4.2" stroke="#F8AE1C" strokeWidth="1.6" />
-          {[
-            [22, 12], [19.07, 19.07], [12, 22], [4.93, 19.07],
-            [2, 12], [4.93, 4.93], [12, 2], [19.07, 4.93],
-          ].map(([cx, cy]) => (
-            <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="1.5" fill="#F8AE1C" />
+          {[0, 45, 90, 135].map((deg) => (
+            <rect key={deg} x="10" y="1" width="4" height="22" rx="1" fill={ICON_Y} transform={`rotate(${deg} 12 12)`} />
           ))}
+          <circle cx="12" cy="12" r="7.5" fill={ICON_Y} />
+          <circle cx="12" cy="12" r="3" fill={ICON_D} />
         </>
       )}
       {name === "shield" && (
         <>
-          <path d="M22 6L12 1.5L2 6V12L12 22.5L22 12V6Z" stroke="#F8AE1C" strokeWidth="1.6" />
-          <path d="M8 12L11 15L17 8" stroke="#F8AE1C" strokeWidth="1.8" />
+          <path d="M22 5.5L12 1L2 5.5V12C2 17 6.5 21.2 12 23C17.5 21.2 22 17 22 12V5.5Z" fill={ICON_Y} />
+          <path d="M7.5 12L10.8 15.3L16.8 8.8" stroke={ICON_D} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
         </>
       )}
     </svg>
@@ -235,7 +239,7 @@ export default function RequestQuote() {
             <ul className="mt-8 space-y-7">
               {FEATURES.map((f) => (
                 <li key={f.title} className="flex items-center gap-4">
-                  <span className="flex h-[50px] w-[50px] shrink-0 items-center justify-center rounded-full border border-tnt-amber">
+                  <span className="flex h-[50px] w-[50px] shrink-0 items-center justify-center rounded-full bg-black">
                     <FeatureIcon name={f.icon} />
                   </span>
                   <span>

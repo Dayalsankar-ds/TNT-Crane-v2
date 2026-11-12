@@ -397,13 +397,7 @@ export default function EquipmentGuide() {
           const isActive = i === activeType;
           const content = (
             <>
-              <span
-                className={`font-display text-2xl leading-none transition-colors group-hover:text-white group-focus-visible:text-white lg:text-xl ${
-                  isActive ? "text-white" : "text-black/35"
-                }`}
-              >
-                {String(i + 1).padStart(2, "0")}
-              </span>
+              {/* Numbering (01–06) removed 2026-11-12, on request. */}
               {/* FIGMA CRANE ICONS (2026-11-04, on request — "follow the same
                   icon from that section in Figma"): the six silhouettes from
                   the Figma "Crane Classes Strip" (nodes 1053:3112–3141),
@@ -413,7 +407,7 @@ export default function EquipmentGuide() {
                   Replaces the generic line icons (`Icon name={t.icon}`). */}
               <span
                 aria-hidden="true"
-                className={`mt-4 block h-9 w-9 bg-current transition-colors group-hover:text-tnt-amber group-focus-visible:text-tnt-amber lg:mt-2.5 lg:h-8 lg:w-8 ${isActive ? "text-tnt-amber" : "text-black/50"}`}
+                className={`block h-9 w-9 bg-current transition-colors group-hover:text-tnt-amber group-focus-visible:text-tnt-amber lg:h-9 lg:w-9 ${isActive ? "text-tnt-amber" : "text-black/50"}`}
                 style={{
                   maskImage: `url(/icons/fleet/${slugify(t.name)}.svg)`,
                   WebkitMaskImage: `url(/icons/fleet/${slugify(t.name)}.svg)`,
@@ -430,7 +424,7 @@ export default function EquipmentGuide() {
                 className={`mt-2 block h-0.5 w-5 transition-colors group-hover:bg-tnt-amber group-focus-visible:bg-tnt-amber ${isActive ? "bg-tnt-amber" : "bg-black/20"}`}
               />
               <span
-                className={`mt-3 font-body text-sm transition-colors group-hover:text-white group-focus-visible:text-white lg:mt-2 lg:text-[13px] ${
+                className={`mt-3 font-body text-lg leading-snug transition-colors group-hover:text-white group-focus-visible:text-white lg:mt-2.5 lg:text-base xl:text-lg ${
                   isActive ? "font-semibold text-white" : "text-black/60"
                 }`}
               >
