@@ -6,6 +6,7 @@ import ScrollButton from "@/components/about/ScrollButton";
 import HashScroll from "@/components/about/HashScroll";
 import Timeline from "@/components/about/Timeline";
 import FamilyBento from "@/components/about/FamilyBento";
+import IndustriesTabs from "@/components/about/IndustriesTabs";
 import CapabilityExplorer from "@/components/about/CapabilityExplorer";
 
 /**
@@ -269,6 +270,27 @@ export default function AboutPage() {
             <Button href="/services" variant="primary">
               Explore Our Services
             </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* 04b — INDUSTRIES (2026-11-12, on request — design "A": tabbed
+          sectors with a photo swap; see IndustriesTabs.tsx). Grey band
+          between the white capabilities section and the off-white reach. */}
+      <section id="industries" aria-labelledby="industries-heading" className="scroll-mt-32 bg-tnt-gray">
+        <div className="px-4 py-20 sm:px-6 sm:py-28 lg:px-[4.45vw]">
+          <div className="max-w-2xl">
+            <Eyebrow>Industries We Serve</Eyebrow>
+            <Heading className="mt-4 text-5xl leading-[0.95] sm:text-6xl">
+              <span id="industries-heading">
+                Every sector.
+                <br />
+                <span className="text-tnt-amber">One standard.</span>
+              </span>
+            </Heading>
+          </div>
+          <div className="mt-12">
+            <IndustriesTabs />
           </div>
         </div>
       </section>

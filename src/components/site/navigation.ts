@@ -100,55 +100,13 @@ export const NAV_GROUPS: NavGroup[] = [
   // Flat: the hero occupies #top, so this is the one item whose destination is
   // the page itself rather than a section within it.
   { label: "Home", href: "/#top", columns: [] },
-  {
-    label: "About",
-    href: "/about",
-    columns: [
-      {
-        no: "01",
-        // Coverage Map and Family of Companies moved in here on 2026-09-10,
-        // when the eight-item bar removed the Coverage group they used to sit
-        // under. "Contact Us" briefly left in the other direction (it was a
-        // top-level flat item, so repeating it here would have been the same
-        // link twice) but came back 2026-09-11 when that top-level item was
-        // removed — this panel is its only way into the nav now.
-        heading: "About TNT",
-        items: [
-          // An /our-story route briefly lived here on 2026-08-06 and was
-          // deleted the same day. This points back at the homepage's Statement
-          // section, which is where "who we are" lives on a single-page site.
-          // Who We Are + Family of Companies point at the /about page
-          // (2026-10-08, approved); the rest stay homepage sections.
-          { label: "Who We Are", href: "/about", icon: "commercial" },
-          { label: "Coverage Map", href: "/#coverage", icon: "pin" },
-          { label: "Family of Companies", href: "/about#family-of-companies", icon: "commercial" },
-          { label: "Safety & Record", href: "/#safety", icon: "engineering" },
-          // "Case Studies" (/#projects) removed 2026-09-18, on request —
-          // it was a dead link: CaseStudies.tsx is unrendered on the
-          // homepage (see page.tsx), so #projects doesn't exist. See
-          // page.tsx's own note — the footer still links there too.
-          { label: "Contact Us", href: "/contact", icon: "mail" },
-        ],
-      },
-      // Dropped with their routes on 2026-08-04, none having a homepage
-      // section: the "Client Portal" column — Rental Agreements, Credit
-      // Application and Payment Portal all pointed at /contact#self-service
-      // (ClientSelfService, which the homepage does not render). Worth noting
-      // the cross-check found NO sister site ships a client portal either.
-    ],
-    // The careers feature went with /careers on 2026-08-04. Replaced with the
-    // iCARE safety program, which IS on the homepage (#safety) — copy drawn
-    // from SafetyCulture rather than invented, so the panel still makes a point
-    // instead of listing.
-    feature: {
-      eyebrow: "Safety",
-      title: "iCARE, on every lift",
-      blurb:
-        "The safety program every crew works to — planned, briefed, and audited on site, from the first pick to the last.",
-      href: "/#safety",
-      cta: "See the program",
-    },
-  },
+  // FLAT, NO DROPDOWN (2026-11-13, on request — "Remove nav bar drop down
+  // for about, it needs to redirect directly to about page"). The panel's
+  // links (Who We Are, Coverage Map, Family of Companies, Safety & Record,
+  // Contact Us) and its iCARE feature card are gone with it; every one of
+  // those destinations is still reachable from the /about page itself, the
+  // top-level Safety and Contact Us items, or the footer.
+  { label: "About", href: "/about", columns: [] },
   {
     // /services is a real page as of 2026-10-09 (Services Overview brief),
     // so the trigger links there and every item deep-links to its detail

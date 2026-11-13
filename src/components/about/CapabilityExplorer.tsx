@@ -50,7 +50,12 @@ export default function CapabilityExplorer() {
         aria-labelledby={`capability-tab-${cap.id}`}
         className="relative order-2 overflow-hidden rounded-xl bg-black lg:order-1"
       >
-        <div className="relative aspect-[16/10]">
+        {/* EQUAL HEIGHTS (2026-11-13, on request — "needs to match the
+            height of the image"): the photo keeps its 16:10 shape where it
+            can (lg:h-full only stretches it when the list needs more room),
+            and the list's rows grow evenly (lg:flex-1) to fill the same
+            height, so both columns always end on the same line. */}
+        <div className="relative aspect-[16/10] lg:h-full">
           {CAPABILITIES.map((c, i) =>
             c.photo ? (
               <Image
@@ -106,7 +111,7 @@ export default function CapabilityExplorer() {
               aria-controls="capability-panel"
               tabIndex={selected ? 0 : -1}
               onClick={() => setActive(i)}
-              className={`group flex items-center gap-4 border-b border-black/10 py-4 text-left transition-colors focus-visible:ring-2 focus-visible:ring-tnt-amber focus-visible:outline-none focus-visible:ring-inset ${
+              className={`group flex items-center gap-4 border-b border-black/10 py-4 text-left lg:flex-1 transition-colors focus-visible:ring-2 focus-visible:ring-tnt-amber focus-visible:outline-none focus-visible:ring-inset ${
                 selected ? "text-black" : "text-black/50 hover:text-black"
               }`}
             >
