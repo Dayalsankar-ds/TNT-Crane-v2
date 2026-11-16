@@ -4,7 +4,7 @@ import Button from "@/components/site/Button";
 import { Heading } from "@/components/site/primitives";
 import { contactFor } from "@/components/site/regionalContacts";
 import CraneRentalContent from "@/components/services/CraneRentalContent";
-import ContactForm from "@/components/contact/ContactForm";
+import QuoteForm from "@/components/site/QuoteForm";
 
 /**
  * /services/crane-rental — Crane Rental's own page (2026-10-09). The first
@@ -51,7 +51,7 @@ export default function CraneRentalPage() {
             </Heading>
             <p className="mt-6 font-body text-lg leading-relaxed text-black/75">
               Tell us the load, the site and the window. If you know the lift weight, radius and
-              height, include them and our team can size the crane faster.
+              height, add them under Comments and our team can size the crane faster.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <Button href={MAIN_LINE.href} variant="primary" arrow={false}>
@@ -64,7 +64,9 @@ export default function CraneRentalPage() {
           </div>
           <div>
             <h3 className="sr-only">Crane rental quote form</h3>
-            <ContactForm service="crane-rental" />
+            {/* Shared homepage QuoteForm (2026-11-13, on request), replacing
+                ContactForm — so the crane-rental preselect no longer applies. */}
+            <QuoteForm />
           </div>
         </div>
       </section>

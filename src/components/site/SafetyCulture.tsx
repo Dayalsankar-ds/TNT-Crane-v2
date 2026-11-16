@@ -25,7 +25,9 @@
  *     type and spacing scaled by viewport height, like the sections above.
  *   - Button is the site's black primary (the design's is a gold outline),
  *     matching the black CTAs the user picked for Services and the Fleet;
- *     it opens the About page's safety section (/about#safety).
+ *     it opens the About page's Incident & Injury Free section
+ *     (/about#incident-injury-free; the old #safety section was removed
+ *     2026-11-16).
  * The previous badge/pillar/certification version is kept below for
  * history; a copy of the file as it was is in the session scratchpad
  * (SafetyCulture.before-figma.tsx).
@@ -173,7 +175,7 @@ export default function SafetyCulture() {
             built into how we plan, communicate and work — every day.
           </p>
           <div className="mt-7 lg:mt-[3.2vh]">
-            <Button href="/about#safety" variant="primary" className="px-6 py-3.5">
+            <Button href="/about#incident-injury-free" variant="primary" className="px-6 py-3.5">
               Our Safety Commitment
             </Button>
           </div>

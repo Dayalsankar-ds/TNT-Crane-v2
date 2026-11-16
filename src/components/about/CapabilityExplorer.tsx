@@ -22,6 +22,44 @@ import { SERVICES } from "@/components/site/services";
 
 const ICONS: Record<string, IconName> = Object.fromEntries(SERVICES.map((s) => [s.id, s.icon]));
 
+/** SUPPLIED ICONS (2026-11-16, on request — "Use this logo on WHAT WE DO
+ *  section"): five solid SVGs the user provided, copied to
+ *  public/icons/capabilities/<service id>.svg and matched by what they show
+ *  (mine.svg = tower crane → Crane Rental; hook.svg → Specialized Rigging;
+ *  crane-machine.svg = gantry → Machinery Moving; crane.svg = wheeled truck
+ *  crane → Heavy Haul & Transport; strategic.svg = gear/plan → Lift Planning &
+ *  Engineering). Drawn as a CSS mask over `bg-current`, so they take the
+ *  row's text colour exactly like the line icons did. Industrial Storage
+ *  had no supplied icon and keeps its line icon. */
+const CUSTOM_ICONS = new Set([
+  "crane-rental",
+  "specialized-rigging",
+  "machinery-moving",
+  "heavy-haul-transport",
+  "lift-planning-engineering",
+]);
+
+function CapIcon({ id, className }: { id: string; className: string }) {
+  if (!CUSTOM_ICONS.has(id)) return <Icon name={ICONS[id]} className={className} />;
+  const url = `url(/icons/capabilities/${id}.svg)`;
+  return (
+    <span
+      aria-hidden="true"
+      className={`block bg-current ${className}`}
+      style={{
+        maskImage: url,
+        WebkitMaskImage: url,
+        maskRepeat: "no-repeat",
+        WebkitMaskRepeat: "no-repeat",
+        maskSize: "contain",
+        WebkitMaskSize: "contain",
+        maskPosition: "center",
+        WebkitMaskPosition: "center",
+      }}
+    />
+  );
+}
+
 export default function CapabilityExplorer() {
   const [active, setActive] = useState(0);
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -123,7 +161,7 @@ export default function CapabilityExplorer() {
                   selected ? "bg-black text-tnt-amber" : "bg-tnt-gray text-black/60 group-hover:text-black"
                 }`}
               >
-                <Icon name={ICONS[c.id]} className="h-5 w-5" />
+                <CapIcon id={c.id} className="h-6 w-6" />
               </span>
               <span className="flex-1 font-display text-xl tracking-wide uppercase sm:text-2xl">{c.title}</span>
               <span

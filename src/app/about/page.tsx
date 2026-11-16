@@ -7,6 +7,7 @@ import HashScroll from "@/components/about/HashScroll";
 import Timeline from "@/components/about/Timeline";
 import FamilyBento from "@/components/about/FamilyBento";
 import IndustriesTabs from "@/components/about/IndustriesTabs";
+import IIFCommitment from "@/components/about/IIFCommitment";
 import CapabilityExplorer from "@/components/about/CapabilityExplorer";
 
 /**
@@ -40,38 +41,6 @@ export const metadata: Metadata = {
     "Since 1985, TNT Crane & Rigging has grown from Houston into a North American crane and rigging family: Southway, RMS Cranes, Eagle West, JMS and TNT Canada.",
 };
 
-const STATS = [
-  { value: "45+", label: "Locations" },
-  { value: "700+", label: "Cranes" },
-  { value: "1,750+", label: "Employees" },
-  { value: "2", label: "Countries" },
-];
-
-const FOOTPRINT: { country: string; rows: { company: string; areas: string[] }[] }[] = [
-  {
-    country: "United States",
-    rows: [
-      { company: "TNT Crane & Rigging", areas: ["TX", "LA", "OK"] },
-      { company: "Southway Crane & Rigging", areas: ["GA", "AL", "SC", "FL"] },
-      { company: "RMS Cranes", areas: ["CO", "WY", "NM"] },
-      { company: "JMS Crane & Rigging", areas: ["MT", "SD"] },
-    ],
-  },
-  {
-    country: "Canada",
-    rows: [
-      { company: "TNT Crane & Rigging Canada", areas: ["AB"] },
-      { company: "Eagle West Crane & Rigging", areas: ["BC"] },
-    ],
-  },
-];
-
-const SAFETY_POINTS = [
-  { title: "Stop-work authority", body: "Every employee, on any job and at any level, can halt work that doesn't meet the standard, with no penalty for calling it." },
-  { title: "Trained, certified operators", body: "Certified crews and daily equipment inspections before machines go to work." },
-  { title: "A lift plan first", body: "A stamped lift plan is in place before the first pick." },
-  { title: "Measured every month", body: "Safety performance is tracked and reported at every branch. It's a running standard, not an annual review." },
-];
 
 /**
  * An eased black → transparent fade for the hero photo's edge. A plain
@@ -295,131 +264,14 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 05 — NORTH AMERICAN REACH */}
-      <section id="our-reach" aria-labelledby="reach-heading" className="scroll-mt-32 bg-[#f5f4f0] text-black">
-        <div className="px-4 py-20 sm:px-6 sm:py-28 lg:px-[4.45vw]">
-          <div className="grid gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-20">
-            <div>
-              <Eyebrow>Our Footprint</Eyebrow>
-              <h2 id="reach-heading" className="mt-4 font-display text-5xl leading-[0.95] tracking-wide text-black uppercase sm:text-6xl">
-                Local expertise.
-                <br />
-                North American reach.
-              </h2>
-              <p className="mt-6 max-w-xl font-body text-lg leading-relaxed text-black/70">
-                Customers work with a branch that knows their region, its sites, its weather and its
-                people. Behind that branch is a family that can coordinate equipment and crews across
-                the United States and Canada when a project calls for more.
-              </p>
-              <dl className="mt-12 grid grid-cols-2 border-t border-black/15">
-                {STATS.map((s, i) => (
-                  <div
-                    key={s.label}
-                    className={`py-7 ${i % 2 === 0 ? "border-r border-black/15 pr-6" : "pl-8"} ${i < 2 ? "border-b border-black/15" : ""}`}
-                  >
-                    <dt className="sr-only">{s.label}</dt>
-                    <dd>
-                      <span className="font-display text-5xl text-black sm:text-6xl">
-                        {s.value.replace(/\+$/, "")}
-                        {s.value.endsWith("+") && <span className="text-tnt-amber">+</span>}
-                      </span>
-                      <span className="mt-2 block font-body text-sm text-black/60">{s.label}</span>
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
+      {/* 05 — INCIDENT & INJURY FREE (2026-11-16, on request): replaces
+          "Our Footprint" (company/state table, stats, photo strip) — see
+          IIFCommitment.tsx. */}
+      <IIFCommitment />
 
-            <div className="space-y-10">
-              {FOOTPRINT.map((country) => (
-                <div key={country.country}>
-                  <h3 className="flex items-center gap-4 font-body text-xs font-bold tracking-[0.18em] text-tnt-amber uppercase">
-                    <span aria-hidden="true" className="h-px w-9 bg-tnt-amber" />
-                    {country.country}
-                  </h3>
-                  <ul className="mt-4 divide-y divide-black/10 border-y border-black/10">
-                    {country.rows.map((r) => (
-                      <li key={r.company} className="flex flex-wrap items-center justify-between gap-3 py-4">
-                        <span className="font-display text-xl tracking-wide uppercase">{r.company}</span>
-                        <span className="flex flex-wrap gap-2">
-                          {r.areas.map((a) => (
-                            <span key={a} className="rounded-md border border-black/20 bg-white px-2.5 py-1 font-body text-xs tracking-wider text-black/80">
-                              {a}
-                            </span>
-                          ))}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-              <Button href="/#coverage" variant="primary">
-                Explore Our Locations
-              </Button>
-            </div>
-          </div>
-        </div>
-        <div className="relative aspect-[21/9] w-full sm:aspect-[3/1]">
-          <Image
-            src="/photos/fleet/hydraulic-truck-crane.jpg"
-            alt="A line of TNT hydraulic truck cranes lifting a pipeline section into place"
-            fill
-            sizes="100vw"
-            className="object-cover"
-          />
-          {/* Eased fade from the section's off-white into the photo (same curve as
-              the hero; see easedFade). Tall (55%) because the sky here is
-              bright, and it starts 2px above the photo so its top edge can't
-              show as a hairline. */}
-          <div aria-hidden="true" className="absolute inset-x-0 -top-0.5 h-[calc(55%+2px)]" style={{ backgroundImage: easedFade("to bottom", "245,244,240") }} />
-        </div>
-      </section>
-
-      {/* 06 — SAFETY & iCARE */}
-      <section id="safety" aria-labelledby="safety-heading" className="scroll-mt-32 bg-[#f7f7f7]">
-        <div className="grid gap-12 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-20 lg:px-[4.45vw]">
-          <div className="flex items-center justify-center rounded-xl bg-white p-10 sm:p-14">
-            <Image
-              src="/brand/icare-badge.png"
-              alt="TNT iCARE safety program badge"
-              width={976}
-              height={1170}
-              sizes="(min-width: 1024px) 24rem, 60vw"
-              className="h-auto w-full max-w-xs"
-            />
-          </div>
-          <div>
-            <Eyebrow>Our Commitment to Safety</Eyebrow>
-            <Heading className="mt-4 text-5xl leading-[0.95] sm:text-6xl">
-              <span id="safety-heading">
-                Safety is part
-                <br />
-                of every lift.
-              </span>
-            </Heading>
-            <p className="mt-6 max-w-xl font-body text-lg leading-relaxed text-black/70">
-              iCARE is TNT&apos;s safety program, and every company in the family works to it. It
-              comes down to accountability on every job and the same standards in every region.
-            </p>
-            <ol className="mt-10 grid gap-x-10 gap-y-8 sm:grid-cols-2">
-              {SAFETY_POINTS.map((p, i) => (
-                <li key={p.title} className="border-t-2 border-black pt-4">
-                  <span className="font-body text-xs font-bold tracking-[0.14em] text-black/40">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <h3 className="mt-2 font-display text-2xl tracking-wide text-black uppercase">{p.title}</h3>
-                  <p className="mt-2 font-body text-base leading-relaxed text-black/65">{p.body}</p>
-                </li>
-              ))}
-            </ol>
-            <div className="mt-10">
-              <Button href="/#safety" variant="primary">
-                Explore Our Safety Commitment
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* 06 — "Our Commitment to Safety" (iCARE badge + four safety points)
+          removed 2026-11-16, on request; the Incident & Injury Free section
+          above now carries the safety story. */}
 
       {/* 07 — FINAL CTA */}
       <section id="work-with-us" aria-labelledby="cta-heading" className="scroll-mt-32 bg-tnt-amber">

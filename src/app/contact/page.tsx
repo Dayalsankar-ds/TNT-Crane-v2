@@ -4,7 +4,7 @@ import { Mail, MapPin, Phone } from "lucide-react";
 import HashScroll from "@/components/about/HashScroll";
 import { Eyebrow } from "@/components/site/primitives";
 import ScrollButton from "@/components/about/ScrollButton";
-import ContactForm from "@/components/contact/ContactForm";
+import QuoteForm from "@/components/site/QuoteForm";
 import RegionalDirectory from "@/components/contact/RegionalDirectory";
 
 /**
@@ -45,14 +45,11 @@ const DETAILS = [
   { icon: MapPin, label: "Headquarters", value: "Houston, Texas", href: null, mono: false },
 ];
 
-export default async function ContactPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}) {
-  // ?service=<services.ts id> preselects the quote form's service (sent by
-  // /services and the homepage cards). Reading it makes this route dynamic.
-  const { service } = await searchParams;
+// SAME FORM AS THE HOMEPAGE (2026-11-13, on request): the shared QuoteForm
+// replaces ContactForm here. It has no services field, so the old
+// ?service=<id> preselect is no longer read — links that still carry it
+// just land on the form — and the route is static again.
+export default function ContactPage() {
   return (
     <>
       <HashScroll />
@@ -91,7 +88,7 @@ export default async function ContactPage({
               /contact#contact-form still land on it. */}
           <div id="contact-form" className="scroll-mt-32 lg:col-start-2 lg:row-span-2 lg:row-start-1">
             <h2 className="sr-only">Contact form</h2>
-            <ContactForm service={typeof service === "string" ? service : undefined} />
+            <QuoteForm />
           </div>
 
           <div className="lg:col-start-1 lg:row-start-2">
