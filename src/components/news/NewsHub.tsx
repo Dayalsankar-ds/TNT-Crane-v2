@@ -62,30 +62,48 @@ function Meta({ story }: { story: Story }) {
 const newTab = { target: "_blank", rel: "noopener noreferrer" } as const;
 const NEW_TAB_NOTE = <span className="sr-only"> (opens the company site in a new tab)</span>;
 
-/** Lead story: photo on top, headline below. */
-function LeadStory({ story, priority = false }: { story: Story; priority?: boolean }) {
+/**
+ * Top-story cluster: lead photo beside the related headlines, lead text below
+ * the photo. From md up the photo sits in the same grid row as the headlines
+ * and stretches to their height (2026-11-17, on request: "match the image
+ * height according to that content height"), instead of a fixed 16:10 frame
+ * that ran taller than the list. Below md it stacks: photo, lead, headlines.
+ */
+function LeadCluster({ lead: story, related, priority = false }: { lead: Story; related: Story[]; priority?: boolean }) {
   return (
-    <a href={story.url} {...newTab} className="group block">
-      <div className="relative aspect-[16/10] overflow-hidden rounded-xl bg-black/5">
+    <div className="grid gap-x-8 gap-y-4 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
+      {/* Photo link is a duplicate of the headline link: hidden from AT and tab order. */}
+      <a
+        href={story.url}
+        {...newTab}
+        aria-hidden="true"
+        tabIndex={-1}
+        className="group relative block aspect-[16/10] overflow-hidden rounded-xl bg-black/5 md:col-start-1 md:row-start-1 md:aspect-auto md:h-full md:min-h-56"
+      >
         <Image
           src={story.photo}
-          alt={story.alt}
+          alt=""
           fill
           priority={priority}
           sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 100vw"
           className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
         />
-      </div>
-      <div className="mt-4">
+      </a>
+      <a href={story.url} {...newTab} className="group block md:col-start-1 md:row-start-2">
         <SourceTag id={story.source} />
+        <h3 className="mt-2 font-body text-2xl leading-snug font-semibold normal-case tracking-normal text-black transition-colors group-hover:text-tnt-amber sm:text-3xl">
+          {story.title}
+        </h3>
+        <p className="mt-2 line-clamp-2 font-body text-lg leading-relaxed text-black/60">{story.summary}</p>
+        <Meta story={story} />
+        {NEW_TAB_NOTE}
+      </a>
+      <div className="mt-2 divide-y divide-black/10 border-t border-black/10 pt-4 md:col-start-2 md:row-start-1 md:mt-0 md:self-start md:border-t-0 md:pt-0">
+        {related.map((s) => (
+          <HeadlineRow key={s.id} story={s} />
+        ))}
       </div>
-      <h3 className="mt-2 font-body text-2xl leading-snug font-semibold normal-case tracking-normal text-black transition-colors group-hover:text-tnt-amber sm:text-3xl">
-        {story.title}
-      </h3>
-      <p className="mt-2 line-clamp-2 font-body text-lg leading-relaxed text-black/60">{story.summary}</p>
-      <Meta story={story} />
-      {NEW_TAB_NOTE}
-    </a>
+    </div>
   );
 }
 
@@ -326,13 +344,8 @@ function Home({ today, go }: { today: string | null; go: (v: View) => void }) {
                     <Chevron className="h-4 w-4 text-tnt-amber transition-transform group-hover:translate-x-0.5" />
                   </button>
                 </h3>
-                <div className="mt-4 grid gap-6 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] md:gap-8">
-                  <LeadStory story={c.lead} priority={i === 0} />
-                  <div className="divide-y divide-black/10 border-t border-black/10 pt-4 md:border-t-0 md:pt-0">
-                    {c.related.map((s) => (
-                      <HeadlineRow key={s.id} story={s} />
-                    ))}
-                  </div>
+                <div className="mt-4">
+                  <LeadCluster lead={c.lead} related={c.related} priority={i === 0} />
                 </div>
                 <button
                   type="button"
