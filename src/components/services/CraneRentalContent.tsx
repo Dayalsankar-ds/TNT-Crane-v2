@@ -19,7 +19,7 @@
 
 import Image from "next/image";
 import Button from "@/components/site/Button";
-import { Eyebrow, Heading, Icon } from "@/components/site/primitives";
+import { Icon, Kicker } from "@/components/site/primitives";
 import ScrollButton from "@/components/about/ScrollButton";
 import {
   COMPANIES,
@@ -60,18 +60,19 @@ export default function CraneRentalContent() {
     <>
       {/* A — INTRO */}
       <section className="bg-white">
-        <div className="mx-auto grid max-w-7xl gap-12 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center lg:gap-16 lg:px-8">
+        <div className="grid gap-12 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center lg:gap-16 lg:px-[4.45vw]">
           <div>
-            <Eyebrow>Core Service {SERVICE.index}</Eyebrow>
-            <Heading as="h1" className="mt-4 text-6xl leading-[0.95] sm:text-7xl">
+            <Kicker>Core Service {SERVICE.index}</Kicker>
+            <h1 className="mt-4 font-display text-6xl leading-[1.02] text-black uppercase sm:text-7xl">
               {SERVICE.label}
-            </Heading>
-            <p className="mt-6 max-w-xl font-body text-lg leading-relaxed text-black/70">{DETAIL.description}</p>
+            </h1>
+            <p className="mt-6 max-w-xl font-body text-lg leading-relaxed text-tnt-body">{DETAIL.description}</p>
 
             <ul className="mt-8 grid gap-4 sm:grid-cols-2">
               {RENTAL_OPTIONS.map((o) => (
-                <li key={o.title} className="border-t-2 border-black pt-4">
-                  <h3 className="font-display text-xl tracking-wide text-black uppercase">{o.title}</h3>
+                <li key={o.title} className="border-t border-black/10 pt-4">
+                  <span aria-hidden="true" className="block h-0.5 w-5 bg-tnt-amber" />
+                  <h3 className="mt-3 font-display text-xl text-black uppercase">{o.title}</h3>
                   <p className="mt-2 font-body text-[15px] leading-relaxed text-black/60">{o.body}</p>
                 </li>
               ))}
@@ -101,17 +102,17 @@ export default function CraneRentalContent() {
       </section>
 
       {/* B — CRANE TYPES */}
-      <section aria-labelledby="crane-focus-types" className="bg-[#f7f7f7]">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
+      <section aria-labelledby="crane-focus-types" className="bg-tnt-gray">
+        <div className="px-4 py-20 sm:px-6 sm:py-24 lg:px-[4.45vw]">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
             <div className="max-w-2xl">
-              <Eyebrow>Crane Types</Eyebrow>
-              <h2 id="crane-focus-types" className="mt-4 font-display text-5xl leading-[0.95] tracking-wide text-black uppercase sm:text-6xl">
+              <Kicker>Crane Types</Kicker>
+              <h2 id="crane-focus-types" className="mt-4 font-display text-5xl leading-[1.02] text-black uppercase sm:text-6xl">
                 Find the right crane
                 <br />
-                for your project
+                <span className="text-tnt-amber">for your project</span>
               </h2>
-              <p className="mt-6 font-body text-lg leading-relaxed text-black/70">{DETAIL.scope}</p>
+              <p className="mt-6 font-body text-lg leading-relaxed text-tnt-body">{DETAIL.scope}</p>
             </div>
             <div className="flex flex-wrap gap-4">
               <Button href="/#fleet-guide" variant="primary">
@@ -145,19 +146,19 @@ export default function CraneRentalContent() {
 
       {/* C — WHO OFFERS IT */}
       <section aria-labelledby="crane-focus-companies" className="bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
+        <div className="px-4 py-20 sm:px-6 sm:py-24 lg:px-[4.45vw]">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end lg:gap-20">
             <div>
-              <Eyebrow>TNT Family of Companies</Eyebrow>
-              <Heading className="mt-4 text-5xl leading-[0.95] sm:text-6xl">
+              <Kicker>TNT Family of Companies</Kicker>
+              <h2 className="mt-4 font-display text-5xl leading-[1.02] text-black uppercase sm:text-6xl">
                 <span id="crane-focus-companies">
                   Crane rental
                   <br />
-                  across the family
+                  <span className="text-tnt-amber">across the family</span>
                 </span>
-              </Heading>
+              </h2>
             </div>
-            <p className="font-body text-lg leading-relaxed text-black/70">
+            <p className="font-body text-lg leading-relaxed text-tnt-body">
               Who offers crane rental, and what each company lists. Where a company&rsquo;s own
               services don&rsquo;t say, ask our team. {CONFIRM_FALLBACK}
             </p>
@@ -172,7 +173,7 @@ export default function CraneRentalContent() {
                   className="grid gap-3 px-6 py-5 sm:px-8 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1.4fr)_auto] md:items-center md:gap-8"
                 >
                   <div>
-                    <h3 className="font-display text-xl tracking-wide text-black uppercase">{c.name}</h3>
+                    <h3 className="font-display text-xl text-black uppercase">{c.name}</h3>
                     <p className="mt-0.5 font-body text-[13px] text-black/50">
                       {c.country === "CA" ? "Canada" : "United States"} · {c.territory}
                     </p>
@@ -199,14 +200,14 @@ export default function CraneRentalContent() {
       </section>
 
       {/* D — SPECIALIZED CRANE WORK */}
-      <section aria-labelledby="crane-focus-special" className="bg-[#f5f4f0]">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
+      <section aria-labelledby="crane-focus-special" className="bg-tnt-gray">
+        <div className="px-4 py-20 sm:px-6 sm:py-24 lg:px-[4.45vw]">
           <div className="max-w-2xl">
-            <Eyebrow>Specialized Crane Work</Eyebrow>
-            <Heading className="mt-4 text-5xl leading-[0.95] sm:text-6xl">
-              <span id="crane-focus-special">Regional specialties</span>
-            </Heading>
-            <p className="mt-6 font-body text-lg leading-relaxed text-black/70">
+            <Kicker>Specialized Crane Work</Kicker>
+            <h2 className="mt-4 font-display text-5xl leading-[1.02] text-black uppercase sm:text-6xl">
+              <span id="crane-focus-special">Regional <span className="text-tnt-amber">specialties</span></span>
+            </h2>
+            <p className="mt-6 font-body text-lg leading-relaxed text-tnt-body">
               Crane work offered by specific companies in the family, not at every location.
             </p>
           </div>
@@ -218,7 +219,7 @@ export default function CraneRentalContent() {
                     <Icon name="pin" className="h-3.5 w-3.5 text-tnt-amber" />
                     {c.provider}
                   </span>
-                  <h3 className="mt-5 font-display text-2xl tracking-wide text-black uppercase">{c.title}</h3>
+                  <h3 className="mt-5 font-display text-2xl text-black uppercase">{c.title}</h3>
                   <ul className="mt-3 flex-1 space-y-1.5">
                     {c.items.map((i) => (
                       <li key={i} className="flex items-start gap-2 font-body text-[14px] text-black/65">
@@ -241,11 +242,11 @@ export default function CraneRentalContent() {
 
       {/* E — OFTEN PAIRED WITH */}
       <section aria-labelledby="crane-focus-related" className="bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
-          <Eyebrow>Related Services</Eyebrow>
-          <Heading className="mt-4 text-4xl leading-[0.95] sm:text-5xl">
-            <span id="crane-focus-related">Often paired with crane rental</span>
-          </Heading>
+        <div className="px-4 py-20 sm:px-6 sm:py-24 lg:px-[4.45vw]">
+          <Kicker>Related Services</Kicker>
+          <h2 className="mt-4 font-display text-4xl leading-[1.02] text-black uppercase sm:text-5xl">
+            <span id="crane-focus-related">Often paired with <span className="text-tnt-amber">crane rental</span></span>
+          </h2>
           <ul className="mt-10 grid gap-5 md:grid-cols-2">
             {RELATED.map((s) => (
               <li key={s.id}>
@@ -257,7 +258,7 @@ export default function CraneRentalContent() {
                     <Icon name={s.icon} className="h-6 w-6" />
                   </span>
                   <span>
-                    <span className="block font-display text-2xl tracking-wide text-black uppercase">{s.label}</span>
+                    <span className="block font-display text-2xl text-black uppercase">{s.label}</span>
                     <span className="mt-2 block font-body text-[15px] leading-relaxed text-black/60">{s.short}</span>
                     <span className="mt-4 inline-flex items-center gap-2 font-body text-sm font-semibold text-black group-hover:text-tnt-amber">
                       Learn more

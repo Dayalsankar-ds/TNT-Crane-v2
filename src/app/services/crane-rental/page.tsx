@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import HashScroll from "@/components/about/HashScroll";
-import Button from "@/components/site/Button";
-import { Heading } from "@/components/site/primitives";
-import { contactFor } from "@/components/site/regionalContacts";
 import CraneRentalContent from "@/components/services/CraneRentalContent";
-import QuoteForm from "@/components/site/QuoteForm";
+import RequestQuote from "@/components/site/RequestQuote";
 
 /**
  * /services/crane-rental — Crane Rental's own page (2026-10-09). The first
@@ -28,48 +25,16 @@ export const metadata: Metadata = {
   alternates: { canonical: "/services/crane-rental" },
 };
 
-const MAIN_LINE = contactFor("TNT Crane & Rigging")!.phones[0];
-
 export default function CraneRentalPage() {
   return (
     <>
       <HashScroll />
       <CraneRentalContent />
 
-      {/* QUOTE — form on the page. Gold band like /services' close; the
-          form card sits on it the way the homepage quote form sits on grey. */}
-      <section id="quote" aria-labelledby="crane-quote-heading" className="scroll-mt-32 bg-tnt-amber">
-        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-20 sm:px-6 sm:py-24 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16 lg:px-8">
-          <div>
-            <p className="font-body text-[13px] font-bold tracking-[0.18em] text-black/70 uppercase">Request a Quote</p>
-            <Heading className="mt-4 text-5xl leading-[0.95] sm:text-6xl">
-              <span id="crane-quote-heading">
-                Get a crane
-                <br />
-                rental quote
-              </span>
-            </Heading>
-            <p className="mt-6 font-body text-lg leading-relaxed text-black/75">
-              Tell us the load, the site and the window. If you know the lift weight, radius and
-              height, add them under Comments and our team can size the crane faster.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-4">
-              <Button href={MAIN_LINE.href} variant="primary" arrow={false}>
-                Call {MAIN_LINE.display}
-              </Button>
-              <Button href="/contact#regional-contacts" variant="secondary">
-                Regional contacts
-              </Button>
-            </div>
-          </div>
-          <div>
-            <h3 className="sr-only">Crane rental quote form</h3>
-            {/* Shared homepage QuoteForm (2026-11-13, on request), replacing
-                ContactForm — so the crane-rental preselect no longer applies. */}
-            <QuoteForm />
-          </div>
-        </div>
-      </section>
+      {/* QUOTE — the home page's own Request a Quote section (2026-11-17, on
+          request — match the home screen), replacing the gold band. Same
+          shared QuoteForm as before, now in the home layout. */}
+      <RequestQuote />
     </>
   );
 }

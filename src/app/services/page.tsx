@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Button from "@/components/site/Button";
-import { Eyebrow, Heading, Icon } from "@/components/site/primitives";
+import { Icon, Kicker } from "@/components/site/primitives";
+import RequestQuote from "@/components/site/RequestQuote";
 import ScrollButton from "@/components/about/ScrollButton";
 import HashScroll from "@/components/about/HashScroll";
 import TargetHighlight from "@/components/site/TargetHighlight";
@@ -9,7 +10,6 @@ import RegionalAvailability from "@/components/services/RegionalAvailability";
 import CraneTypeGrid from "@/components/services/CraneTypeGrid";
 import HashRedirect from "@/components/services/HashRedirect";
 import { COMPANIES, SERVICES, availability, serviceById, serviceHref } from "@/components/site/services";
-import { contactFor } from "@/components/site/regionalContacts";
 import {
   PROJECTS,
   SERVICE_DETAILS,
@@ -84,10 +84,6 @@ const SAFETY_POINTS = [
   "Project-specific risk considerations",
 ];
 
-/** TNT's main published line (regionalContacts.ts), for the quote band —
- *  buyers often call rather than fill in a form. */
-const MAIN_LINE = contactFor("TNT Crane & Rigging")!.phones[0];
-
 /** Companies that offer a service directly, by short name. */
 function directProviders(id: (typeof SERVICES)[number]["id"]) {
   return COMPANIES.filter((c) => availability(c.id, id).status === "direct").map((c) => c.short);
@@ -134,7 +130,7 @@ export default function ServicesPage() {
           <div aria-hidden="true" className="absolute inset-x-0 -top-0.5 h-[calc(45%+2px)] lg:hidden" style={{ backgroundImage: easedFade("to bottom") }} />
         </div>
 
-        <div className="relative z-10 order-1 flex flex-col justify-center px-6 py-16 sm:px-10 sm:py-20 lg:w-[50%] lg:px-16 xl:px-20">
+        <div className="relative z-10 order-1 flex flex-col justify-center px-4 py-16 sm:px-6 sm:py-20 lg:w-[50%] lg:px-[4.45vw]">
           <p className="flex items-center gap-4 font-body text-[13px] font-bold tracking-[0.18em] text-tnt-amber uppercase">
             <span aria-hidden="true" className="h-px w-9 bg-tnt-amber" />
             Our Services
@@ -161,20 +157,20 @@ export default function ServicesPage() {
       </section>
 
       {/* 02 — INTRODUCTION */}
-      <section aria-labelledby="intro-heading" className="bg-white">
-        <div className="mx-auto grid max-w-7xl gap-12 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-20 lg:px-8">
+      <section aria-labelledby="intro-heading" className="bg-tnt-gray">
+        <div className="grid gap-12 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-20 lg:px-[4.45vw]">
           <div>
-            <Eyebrow>The TNT Network</Eyebrow>
-            <Heading className="mt-4 text-5xl leading-[0.95] sm:text-6xl">
+            <Kicker>The TNT Network</Kicker>
+            <h2 className="mt-4 font-display text-5xl leading-[1.02] text-black uppercase sm:text-6xl">
               <span id="intro-heading">
                 One network.
                 <br />
-                Complete project support.
+                <span className="text-tnt-amber">Complete project support.</span>
               </span>
-            </Heading>
+            </h2>
           </div>
           <div>
-            <p className="font-body text-lg leading-relaxed text-black/70">
+            <p className="font-body text-lg leading-relaxed text-tnt-body">
               TNT Crane &amp; Rigging brings together specialized equipment, experienced teams and
               regional expertise for lifting, rigging, transportation, engineering and industrial
               projects. Through its family of companies, TNT connects customers with the capabilities
@@ -182,8 +178,9 @@ export default function ServicesPage() {
             </p>
             <ul className="mt-10 grid gap-x-10 gap-y-7 sm:grid-cols-2">
               {KEY_MESSAGES.map((m) => (
-                <li key={m.title} className="border-t-2 border-black pt-4">
-                  <h3 className="font-display text-xl tracking-wide text-black uppercase">{m.title}</h3>
+                <li key={m.title} className="border-t border-black/10 pt-4">
+                  <span aria-hidden="true" className="block h-0.5 w-5 bg-tnt-amber" />
+                  <h3 className="mt-3 font-display text-xl text-black uppercase">{m.title}</h3>
                   <p className="mt-2 font-body text-[15px] leading-relaxed text-black/60">{m.body}</p>
                 </li>
               ))}
@@ -193,14 +190,18 @@ export default function ServicesPage() {
       </section>
 
       {/* 03 — CORE SERVICES */}
-      <section id="core-services" aria-labelledby="core-heading" className="scroll-mt-32 bg-[#f7f7f7]">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
-          <div className="max-w-3xl">
-            <Eyebrow>Core Services</Eyebrow>
-            <Heading className="mt-4 text-5xl leading-[0.95] sm:text-6xl">
-              <span id="core-heading">Our core services</span>
-            </Heading>
-            <p className="mt-6 font-body text-lg leading-relaxed text-black/70">
+      <section id="core-services" aria-labelledby="core-heading" className="scroll-mt-32 bg-white">
+        {/* Two columns from xl (2026-11-17, on request): A = the section
+            header, sticky under the nav like the home page's Services
+            column; B = the service cards, two across. Below xl it stacks. */}
+        <div className="grid gap-12 px-4 py-20 sm:px-6 sm:py-28 lg:px-[4.45vw] xl:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] xl:gap-16 2xl:grid-cols-[minmax(0,24rem)_minmax(0,1fr)]">
+          {/* A */}
+          <div className="max-w-3xl xl:sticky xl:top-[calc(var(--chrome-h)+2.5rem)] xl:self-start">
+            <Kicker>Core Services</Kicker>
+            <h2 className="mt-4 font-display text-5xl leading-[1.02] text-black uppercase sm:text-6xl">
+              <span id="core-heading">Our core <span className="text-tnt-amber">services</span></span>
+            </h2>
+            <p className="mt-6 font-body text-lg leading-relaxed text-tnt-body">
               Explore comprehensive lifting, rigging, transportation and industrial solutions.
             </p>
           </div>
@@ -209,7 +210,8 @@ export default function ServicesPage() {
               at three across the chips wrap into a column of one-word rows.
               Not a stretched-link card — each has its own CTA and expandable
               list, so the card itself isn't one control. */}
-          <ol className="mt-12 grid gap-6 lg:grid-cols-2">
+          {/* B */}
+          <ol className="grid gap-6 lg:grid-cols-2">
             {SERVICES.map((s) => {
               const d = SERVICE_DETAILS[s.id];
               const providers = directProviders(s.id);
@@ -242,10 +244,10 @@ export default function ServicesPage() {
                     </div>
 
                     <div className="flex flex-1 flex-col p-6 sm:p-8">
-                      <h3 id={`${s.id}-title`} className="font-display text-3xl tracking-wide text-black uppercase">
+                      <h3 id={`${s.id}-title`} className="font-display text-3xl text-black uppercase">
                         {s.label}
                       </h3>
-                      <p className="mt-3 font-body text-base leading-relaxed text-black/70">{d.description}</p>
+                      <p className="mt-3 font-body text-base leading-relaxed text-tnt-body">{d.description}</p>
 
                       <p className="mt-6 font-body text-[11px] font-semibold tracking-[0.16em] text-tnt-meta uppercase">
                         {d.listLabel}
@@ -296,20 +298,20 @@ export default function ServicesPage() {
       </section>
 
       {/* 04 — SPECIALIZED CAPABILITIES */}
-      <section id="specialized" aria-labelledby="specialized-heading" className="scroll-mt-32 bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
+      <section id="specialized" aria-labelledby="specialized-heading" className="scroll-mt-32 bg-tnt-gray">
+        <div className="px-4 py-20 sm:px-6 sm:py-28 lg:px-[4.45vw]">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end lg:gap-20">
             <div>
-              <Eyebrow>Specialized Capabilities</Eyebrow>
-              <Heading className="mt-4 text-5xl leading-[0.95] sm:text-6xl">
+              <Kicker>Specialized Capabilities</Kicker>
+              <h2 className="mt-4 font-display text-5xl leading-[1.02] text-black uppercase sm:text-6xl">
                 <span id="specialized-heading">
                   Specialized solutions
                   <br />
-                  for complex projects
+                  <span className="text-tnt-amber">for complex projects</span>
                 </span>
-              </Heading>
+              </h2>
             </div>
-            <p className="font-body text-lg leading-relaxed text-black/70">
+            <p className="font-body text-lg leading-relaxed text-tnt-body">
               Regional and industry-specific capabilities within the TNT family. Each one is offered
               by the company named on it, not across every location.
             </p>
@@ -318,12 +320,12 @@ export default function ServicesPage() {
           <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {SPECIALIZED.map((c) => (
               <li key={c.id} id={c.id} className="scroll-mt-32">
-                <article className="flex h-full flex-col rounded-xl border border-black/10 bg-black/[0.03] p-6 transition-colors duration-300 hover:border-tnt-amber">
+                <article className="flex h-full flex-col rounded-xl border border-black/10 bg-white p-6 transition-colors duration-300 hover:border-tnt-amber">
                   <span className="inline-flex w-fit items-center gap-2 rounded-full border border-tnt-amber/50 bg-tnt-amber/10 px-3 py-1 font-body text-[11px] font-semibold text-black">
                     <Icon name="pin" className="h-3.5 w-3.5 text-tnt-amber" />
                     {c.provider}
                   </span>
-                  <h3 className="mt-5 font-display text-2xl tracking-wide text-black uppercase">{c.title}</h3>
+                  <h3 className="mt-5 font-display text-2xl text-black uppercase">{c.title}</h3>
                   <ul className="mt-3 flex-1 space-y-1.5">
                     {c.items.map((i) => (
                       <li key={i} className="flex items-start gap-2 font-body text-[14px] text-black/65">
@@ -346,58 +348,60 @@ export default function ServicesPage() {
       </section>
 
       {/* 05 — CRANE RENTAL PREVIEW (the one dark band) */}
-      <section id="crane-types" aria-labelledby="cranes-heading" className="scroll-mt-32 bg-black text-white">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
+      <section id="crane-types" aria-labelledby="cranes-heading" className="scroll-mt-32 bg-white">
+        <div className="px-4 py-20 sm:px-6 sm:py-28 lg:px-[4.45vw]">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
             <div className="max-w-2xl">
-              <Eyebrow>Crane Rental</Eyebrow>
-              <h2 id="cranes-heading" className="mt-4 font-display text-5xl leading-[0.95] tracking-wide uppercase sm:text-6xl">
+              <Kicker>Crane Rental</Kicker>
+              <h2 id="cranes-heading" className="mt-4 font-display text-5xl leading-[1.02] text-black uppercase sm:text-6xl">
                 Find the right crane
                 <br />
-                for your project
+                <span className="text-tnt-amber">for your project</span>
               </h2>
-              <p className="mt-6 font-body text-lg leading-relaxed text-white/70">
+              <p className="mt-6 font-body text-lg leading-relaxed text-tnt-body">
                 TNT&rsquo;s range of crane solutions for construction, industrial, infrastructure and
                 specialized lifting. Availability varies by location.
               </p>
             </div>
             <div className="flex flex-wrap gap-4">
-              <Button href={serviceHref(serviceById("crane-rental"))} variant="primary" onDark>
+              <Button href={serviceHref(serviceById("crane-rental"))} variant="primary">
                 Explore Crane Rental
               </Button>
-              <Button href="/load-chart/all-terrain-cranes" variant="secondary" onDark>
+              <Button href="/load-chart/all-terrain-cranes" variant="secondary">
                 Search Load Charts
               </Button>
             </div>
           </div>
 
-          <CraneTypeGrid />
+          <CraneTypeGrid tone="light" />
         </div>
       </section>
 
       {/* 06 — HOW WE WORK */}
-      <section aria-labelledby="process-heading" className="bg-[#f5f4f0]">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
+      <section aria-labelledby="process-heading" className="bg-tnt-gray">
+        <div className="px-4 py-20 sm:px-6 sm:py-28 lg:px-[4.45vw]">
           <div className="max-w-2xl">
-            <Eyebrow>How We Work</Eyebrow>
-            <Heading className="mt-4 text-5xl leading-[0.95] sm:text-6xl">
+            <Kicker>How We Work</Kicker>
+            <h2 className="mt-4 font-display text-5xl leading-[1.02] text-black uppercase sm:text-6xl">
               <span id="process-heading">
                 From planning
                 <br />
-                to project execution
+                <span className="text-tnt-amber">to project execution</span>
               </span>
-            </Heading>
-            <p className="mt-6 font-body text-lg leading-relaxed text-black/70">
+            </h2>
+            <p className="mt-6 font-body text-lg leading-relaxed text-tnt-body">
               A typical engagement. Your team will confirm the steps for your project.
             </p>
           </div>
           <ol className="mt-12 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
             {STEPS.map((step, i) => (
-              <li key={step.title} className="border-t-2 border-black pt-5">
-                <span className="font-body text-sm tabular-nums text-tnt-amber">
-                  Step {String(i + 1).padStart(2, "0")}
+              <li key={step.title} className="border-t border-black/10 pt-6">
+                <span className="font-display text-5xl leading-none text-[#7c8794]">
+                  <span className="sr-only">Step </span>
+                  {String(i + 1).padStart(2, "0")}
                 </span>
-                <h3 className="mt-2 font-display text-2xl tracking-wide text-black uppercase">{step.title}</h3>
+                <span aria-hidden="true" className="mt-4 block h-0.5 w-5 bg-tnt-amber" />
+                <h3 className="mt-3 font-display text-2xl text-black uppercase">{step.title}</h3>
                 <p className="mt-2 font-body text-base leading-relaxed text-black/65">{step.body}</p>
               </li>
             ))}
@@ -407,20 +411,20 @@ export default function ServicesPage() {
 
       {/* 07 — REGIONAL AVAILABILITY */}
       <section id="availability" aria-labelledby="availability-heading" className="scroll-mt-32 bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
+        <div className="px-4 py-20 sm:px-6 sm:py-28 lg:px-[4.45vw]">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end lg:gap-20">
             <div>
-              <Eyebrow>Regional Service Availability</Eyebrow>
-              <Heading className="mt-4 text-5xl leading-[0.95] sm:text-6xl">
+              <Kicker>Regional Service Availability</Kicker>
+              <h2 className="mt-4 font-display text-5xl leading-[1.02] text-black uppercase sm:text-6xl">
                 <span id="availability-heading">
                   Local expertise.
                   <br />
-                  Connected capabilities.
+                  <span className="text-tnt-amber">Connected capabilities.</span>
                 </span>
-              </Heading>
+              </h2>
             </div>
             <div>
-              <p className="font-body text-lg leading-relaxed text-black/70">
+              <p className="font-body text-lg leading-relaxed text-tnt-body">
                 TNT&rsquo;s regional network connects you with the right teams, equipment and services
                 for your project location. Choose a company to see what it offers.
               </p>
@@ -438,17 +442,17 @@ export default function ServicesPage() {
       </section>
 
       {/* 08 — PROJECTS */}
-      <section aria-labelledby="projects-heading" className="bg-[#f7f7f7]">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
+      <section aria-labelledby="projects-heading" className="bg-tnt-gray">
+        <div className="px-4 py-20 sm:px-6 sm:py-28 lg:px-[4.45vw]">
           <div className="max-w-2xl">
-            <Eyebrow>Projects</Eyebrow>
-            <Heading className="mt-4 text-5xl leading-[0.95] sm:text-6xl">
+            <Kicker>Projects</Kicker>
+            <h2 className="mt-4 font-display text-5xl leading-[1.02] text-black uppercase sm:text-6xl">
               <span id="projects-heading">
                 Proven capabilities.
                 <br />
-                Real-world projects.
+                <span className="text-tnt-amber">Real-world projects.</span>
               </span>
-            </Heading>
+            </h2>
           </div>
           <ul className="mt-12 grid gap-5 md:grid-cols-3">
             {PROJECTS.map((p) => (
@@ -459,7 +463,7 @@ export default function ServicesPage() {
                   </div>
                   <div className="p-5">
                     <p className="font-body text-[11px] font-semibold tracking-[0.16em] text-tnt-amber uppercase">{p.service}</p>
-                    <h3 className="mt-2 font-display text-xl tracking-wide text-black uppercase">{p.category}</h3>
+                    <h3 className="mt-2 font-display text-xl text-black uppercase">{p.category}</h3>
                     <p className="mt-3 inline-flex rounded-full border border-black/15 px-3 py-1 font-body text-[12px] text-black/55">
                       Project details coming soon
                     </p>
@@ -473,23 +477,23 @@ export default function ServicesPage() {
 
       {/* 09 — SAFETY & ENGINEERING */}
       <section aria-labelledby="safety-eng-heading" className="bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
+        <div className="px-4 py-20 sm:px-6 sm:py-28 lg:px-[4.45vw]">
           <div className="max-w-2xl">
-            <Eyebrow>Safety &amp; Engineering</Eyebrow>
-            <Heading className="mt-4 text-5xl leading-[0.95] sm:text-6xl">
+            <Kicker>Safety &amp; Engineering</Kicker>
+            <h2 className="mt-4 font-display text-5xl leading-[1.02] text-black uppercase sm:text-6xl">
               <span id="safety-eng-heading">
                 Safety and precision
                 <br />
-                at every stage
+                <span className="text-tnt-amber">at every stage</span>
               </span>
-            </Heading>
+            </h2>
           </div>
           <div className="mt-12 grid gap-6 lg:grid-cols-2">
             <article className="flex flex-col rounded-xl bg-black p-8 text-white sm:p-10">
               <span className="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-tnt-amber/15 text-tnt-amber">
                 <Icon name="engineering" className="h-6 w-6" />
               </span>
-              <h3 className="mt-6 font-display text-3xl tracking-wide uppercase">Engineering expertise</h3>
+              <h3 className="mt-6 font-display text-3xl uppercase">Engineering expertise</h3>
               <p className="mt-3 font-body text-base leading-relaxed text-white/70">
                 Complex lifting operations call for careful planning, technical analysis and the right
                 equipment for the job.
@@ -520,8 +524,8 @@ export default function ServicesPage() {
                   className="h-auto w-16 sm:w-20"
                 />
               </div>
-              <h3 className="mt-6 font-display text-3xl tracking-wide text-black uppercase">Safety commitment</h3>
-              <p className="mt-3 font-body text-base leading-relaxed text-black/70">
+              <h3 className="mt-6 font-display text-3xl text-black uppercase">Safety commitment</h3>
+              <p className="mt-3 font-body text-base leading-relaxed text-tnt-body">
                 Safety is an essential consideration throughout TNT&rsquo;s lifting, rigging and
                 industrial operations, and iCARE is the program every company in the family works to.
               </p>
@@ -543,34 +547,9 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* 10 — REQUEST A QUOTE */}
-      <section id="quote" aria-labelledby="quote-heading" className="scroll-mt-32 bg-tnt-amber">
-        <div className="mx-auto flex max-w-7xl flex-col gap-10 px-4 py-20 sm:px-6 sm:py-24 lg:flex-row lg:items-end lg:justify-between lg:px-8">
-          <div className="max-w-2xl">
-            <p className="font-body text-[13px] font-bold tracking-[0.18em] text-black/70 uppercase">Request a Quote</p>
-            <h2 id="quote-heading" className="mt-4 font-display text-5xl leading-[0.95] tracking-wide text-black uppercase sm:text-6xl">
-              Let&rsquo;s plan
-              <br />
-              your next project
-            </h2>
-            <p className="mt-6 font-body text-lg leading-relaxed text-black/75">
-              Tell us about your project and our team can help identify the right service and next
-              steps.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-4">
-            <Button href="/contact#contact-form" variant="primary">
-              Request a Quote
-            </Button>
-            <Button href="/contact#regional-contacts" variant="secondary">
-              Contact Our Team
-            </Button>
-            <Button href={MAIN_LINE.href} variant="secondary" arrow={false}>
-              Call {MAIN_LINE.display}
-            </Button>
-          </div>
-        </div>
-      </section>
+      {/* 10 — REQUEST A QUOTE: the home page's own quote section (2026-11-17,
+          on request — match the home screen), replacing the gold CTA band. */}
+      <RequestQuote />
     </>
   );
 }

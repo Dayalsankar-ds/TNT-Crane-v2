@@ -26,6 +26,21 @@ export function Eyebrow({
   );
 }
 
+/**
+ * Kicker — the HOME PAGE's section label (LatestNews, CoreServices,
+ * RequestQuote): 13px black caps led by a short amber bar. Added 2026-11-17
+ * so /services and /services/crane-rental match the home screen; Eyebrow
+ * (amber text, no bar) stays for About and the dark heroes.
+ */
+export function Kicker({ children, className = "" }: { children: ReactNode; className?: string }) {
+  return (
+    <p className={`flex items-center gap-3 font-body text-[13px] font-bold tracking-[0.18em] text-black uppercase ${className}`}>
+      <span aria-hidden="true" className="h-0.5 w-6 shrink-0 bg-tnt-amber" />
+      {children}
+    </p>
+  );
+}
+
 export function Heading({
   children,
   as: Tag = "h2",
