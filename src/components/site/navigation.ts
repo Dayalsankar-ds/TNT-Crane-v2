@@ -197,7 +197,7 @@ export const NAV_GROUPS: NavGroup[] = [
   // see the `href` docs on NavGroup above. Careers was removed for Contact
   // Us and brought back beside it the same day (2026-10-08, on request).
   { label: "Careers", href: null, columns: [] },
-  { label: "News", href: null, columns: [] },
+  { label: "News", href: "/news", columns: [] }, // /news built 2026-11-17
   { label: "For Sale", href: null, columns: [] },
   // "Contact us" removed as a top-level item 2026-09-11, on request. It
   // moved back into the About panel's items (see that column above) rather
@@ -318,7 +318,7 @@ export const LOCATION_DETAILS: Record<string, LocationDetails> = {
   },
   "buda-tx": {
     branch: "TNT Buda",
-    address: "194 Commerce Cir Dr",
+    address: "194 Commerce Ctr Dr",
     city: "Buda",
     state: "TX",
     zip: "78610",
@@ -362,7 +362,7 @@ export const LOCATION_DETAILS: Record<string, LocationDetails> = {
     city: "Fort Worth",
     state: "TX",
     zip: "76111",
-    phone: "1-817-558-0809",
+    phone: "1-817-558-0808",
     email: "info@tntcrane.com",
     services: ["Crane Rental", "Specialized Rigging & Machinery Moving", "Industrial Storage", "Lift Planning & Engineering"],
   },
@@ -372,7 +372,7 @@ export const LOCATION_DETAILS: Record<string, LocationDetails> = {
     city: "Freeport",
     state: "TX",
     zip: "77541",
-    phone: "1-979-271-3545",
+    phone: "1-979-217-3545",
     email: "info@tntcrane.com",
     services: ["Crane Rental", "Specialized Rigging & Machinery Moving", "Industrial Storage", "Lift Planning & Engineering"],
   },
