@@ -54,11 +54,77 @@
  * to the "Showing N of M" count, the one thing left on the right side of the
  * old two-filter layout; moved into the aside, above Make, so every filter
  * lives in one place. "Showing N of M" now has that top row to itself.
+ *
+ * FILTER PANEL RESTYLE (2026-11-18, on request — "follow this design",
+ * a screenshot of tntcrane.com's chart filter): grey panel, search input
+ * with a full-width SEARCH button (amber here, not the live site's red),
+ * "Manufacturer" and "Tonnage Range" checkbox groups. The min/max tonnage
+ * inputs were replaced with the live site's checkbox buckets (40-59 …
+ * 400-999); checked buckets are ORed, groups are ANDed. Search still
+ * filters as you type; the button just submits the form.
  */
 
 import { useMemo, useState } from "react";
 import { Icon } from "./primitives";
 import type { CraneModel } from "./craneChartData";
+
+/** Tonnage buckets, as on tntcrane.com's chart filter. Only buckets that
+ *  hold at least one of this page's models are shown. */
+type Band = { label: string; min: number; max: number };
+const TONNAGE_BANDS: Band[] = [
+  { label: "40-59", min: 40, max: 59 },
+  { label: "60-79", min: 60, max: 79 },
+  { label: "80-99", min: 80, max: 99 },
+  { label: "100-199", min: 100, max: 199 },
+  { label: "200-299", min: 200, max: 299 },
+  { label: "300-399", min: 300, max: 399 },
+  { label: "400-999", min: 400, max: 999 },
+];
+const inBand = (tons: number, b: Band) => tons >= b.min && tons <= b.max;
+
+function FilterGroup({
+  title,
+  options,
+  checked,
+  onToggle,
+  onClear,
+}: {
+  title: string;
+  options: string[];
+  checked: Set<string>;
+  onToggle: (value: string) => void;
+  onClear: () => void;
+}) {
+  return (
+    <fieldset className="mt-8">
+      <legend className="font-body text-2xl font-bold text-[#444]">{title}</legend>
+      <ul className="mt-3 flex flex-col gap-2">
+        {options.map((opt) => (
+          <li key={opt}>
+            <label className="flex cursor-pointer items-center gap-2.5 font-body text-base text-[#444] tabular-nums">
+              <input
+                type="checkbox"
+                checked={checked.has(opt)}
+                onChange={() => onToggle(opt)}
+                className="h-4 w-4 shrink-0 rounded-sm border-black/25 accent-tnt-amber focus-visible:ring-2 focus-visible:ring-tnt-amber"
+              />
+              {opt}
+            </label>
+          </li>
+        ))}
+      </ul>
+      {checked.size > 0 && (
+        <button
+          type="button"
+          onClick={onClear}
+          className="mt-3 font-body text-xs font-semibold tracking-wide text-black/60 uppercase underline-offset-4 hover:text-black hover:underline"
+        >
+          Clear
+        </button>
+      )}
+    </fieldset>
+  );
+}
 
 export type CardPhoto = { src: string; isStock: boolean };
 
@@ -78,20 +144,17 @@ export default function CraneCardGrid({
     [models],
   );
 
-  const [dataMin, dataMax] = useMemo(() => {
-    const tons = models.map((m) => m.capacityTons);
-    return [Math.min(...tons), Math.max(...tons)];
-  }, [models]);
+  const tonnageBands = useMemo(
+    () => TONNAGE_BANDS.filter((b) => models.some((m) => inBand(m.capacityTons, b))),
+    [models],
+  );
+  const [checkedBands, setCheckedBands] = useState<Set<string>>(new Set());
 
-  const [minTons, setMinTons] = useState(dataMin);
-  const [maxTons, setMaxTons] = useState(dataMax);
-  const tonnageActive = minTons !== dataMin || maxTons !== dataMax;
-
-  function toggleMake(make: string) {
-    setCheckedMakes((prev) => {
+  function toggle(setter: typeof setCheckedMakes, value: string) {
+    setter((prev) => {
       const next = new Set(prev);
-      if (next.has(make)) next.delete(make);
-      else next.add(make);
+      if (next.has(value)) next.delete(value);
+      else next.add(value);
       return next;
     });
   }
@@ -100,105 +163,55 @@ export default function CraneCardGrid({
     const q = query.trim().toLowerCase();
     return models.filter((m) => {
       if (checkedMakes.size > 0 && !checkedMakes.has(m.make)) return false;
-      if (m.capacityTons < minTons || m.capacityTons > maxTons) return false;
+      if (
+        checkedBands.size > 0 &&
+        !tonnageBands.some((b) => checkedBands.has(b.label) && inBand(m.capacityTons, b))
+      )
+        return false;
       if (!q) return true;
       return m.make.toLowerCase().includes(q) || m.model.toLowerCase().includes(q);
     });
-  }, [models, query, checkedMakes, minTons, maxTons]);
+  }, [models, query, checkedMakes, checkedBands, tonnageBands]);
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[220px_1fr]">
-      {/* ── Make filter, left column ──────────────────────────────────── */}
-      <aside className="lg:sticky lg:top-32 lg:self-start">
-        <label className="relative block">
-          <span className="sr-only">Search by make or model</span>
-          <Icon
-            name="search"
-            className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-black/40"
-            strokeWidth={2}
-          />
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search make or model…"
-            className="w-full rounded-md border border-black/15 bg-white py-2 pr-3 pl-9 font-body text-sm text-black placeholder:text-black/40 focus-visible:border-tnt-amber focus-visible:ring-2 focus-visible:ring-tnt-amber focus-visible:outline-none"
-          />
-        </label>
-
-        <h2 className="mt-8 font-body text-[11px] font-bold tracking-[0.14em] text-black uppercase">
-          Make
-        </h2>
-        <ul className="mt-4 flex flex-col gap-3">
-          {makes.map((make) => (
-            <li key={make}>
-              <label className="flex cursor-pointer items-center gap-2.5 font-body text-sm text-black/75">
-                <input
-                  type="checkbox"
-                  checked={checkedMakes.has(make)}
-                  onChange={() => toggleMake(make)}
-                  className="h-4 w-4 shrink-0 rounded-sm border-black/25 text-tnt-amber accent-tnt-amber focus-visible:ring-2 focus-visible:ring-tnt-amber"
-                />
-                {make}
-              </label>
-            </li>
-          ))}
-        </ul>
-        {checkedMakes.size > 0 && (
-          <button
-            type="button"
-            onClick={() => setCheckedMakes(new Set())}
-            className="mt-4 font-body text-[11px] font-semibold tracking-wide text-tnt-amber uppercase hover:text-black"
-          >
-            Clear filter
-          </button>
-        )}
-
-        <h2 className="mt-8 font-body text-[11px] font-bold tracking-[0.14em] text-black uppercase">
-          Tonnage Range
-        </h2>
-        <div className="mt-4 flex items-center gap-3">
-          <label className="flex-1">
-            <span className="sr-only">Minimum tons</span>
+    <div className="grid gap-8 lg:grid-cols-[300px_1fr] lg:gap-10">
+      {/* ── Filter panel, left column (layout per tntcrane.com's chart
+          filter: grey panel, search + full-width button, checkbox groups) ── */}
+      <aside className="self-start rounded-sm bg-[#f4f4f4] p-5 sm:p-6 lg:sticky lg:top-[calc(var(--chrome-h)+1.5rem)]">
+        <form role="search" onSubmit={(e) => e.preventDefault()}>
+          <label className="block">
+            <span className="sr-only">Search by make or model</span>
             <input
-              type="number"
-              min={dataMin}
-              max={maxTons}
-              value={minTons}
-              onChange={(e) => setMinTons(Number(e.target.value))}
-              onBlur={() => setMinTons((v) => Math.min(Math.max(v, dataMin), maxTons))}
-              className="w-full rounded-md border border-black/15 bg-white px-2.5 py-1.5 font-body text-sm text-black focus-visible:border-tnt-amber focus-visible:ring-2 focus-visible:ring-tnt-amber focus-visible:outline-none"
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search by…"
+              className="w-full rounded-sm border border-black/40 bg-white px-4 py-3 font-body text-base text-black placeholder:text-black/40 focus-visible:border-tnt-amber focus-visible:ring-2 focus-visible:ring-tnt-amber focus-visible:outline-none"
             />
           </label>
-          <span className="font-body text-xs text-black/40">–</span>
-          <label className="flex-1">
-            <span className="sr-only">Maximum tons</span>
-            <input
-              type="number"
-              min={minTons}
-              max={dataMax}
-              value={maxTons}
-              onChange={(e) => setMaxTons(Number(e.target.value))}
-              onBlur={() => setMaxTons((v) => Math.max(Math.min(v, dataMax), minTons))}
-              className="w-full rounded-md border border-black/15 bg-white px-2.5 py-1.5 font-body text-sm text-black focus-visible:border-tnt-amber focus-visible:ring-2 focus-visible:ring-tnt-amber focus-visible:outline-none"
-            />
-          </label>
-        </div>
-        <p className="mt-2 font-body text-[11px] text-black/40">
-          Tons, fleet range {dataMin}–{dataMax}
-        </p>
-        {tonnageActive && (
           <button
-            type="button"
-            onClick={() => {
-              setMinTons(dataMin);
-              setMaxTons(dataMax);
-            }}
-            className="mt-4 font-body text-[11px] font-semibold tracking-wide text-tnt-amber uppercase hover:text-black"
+            type="submit"
+            className="mt-3 flex w-full items-center justify-center gap-2 rounded-sm bg-tnt-amber px-4 py-3 font-body text-base font-bold tracking-[0.04em] text-black uppercase transition-colors hover:bg-black hover:text-tnt-amber focus-visible:ring-2 focus-visible:ring-black focus-visible:outline-none"
           >
-            Clear filter
+            <Icon name="search" className="h-4 w-4" strokeWidth={2.5} />
+            Search
           </button>
-        )}
+        </form>
+
+        <FilterGroup
+          title="Manufacturer"
+          options={makes}
+          checked={checkedMakes}
+          onToggle={(v) => toggle(setCheckedMakes, v)}
+          onClear={() => setCheckedMakes(new Set())}
+        />
+        <FilterGroup
+          title="Tonnage Range"
+          options={tonnageBands.map((b) => b.label)}
+          checked={checkedBands}
+          onToggle={(v) => toggle(setCheckedBands, v)}
+          onClear={() => setCheckedBands(new Set())}
+        />
       </aside>
 
       <div>
