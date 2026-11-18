@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Button from "@/components/site/Button";
-import { Icon, Kicker } from "@/components/site/primitives";
+import { Icon, Kicker, type IconName } from "@/components/site/primitives";
 import RequestQuote from "@/components/site/RequestQuote";
 import ScrollButton from "@/components/about/ScrollButton";
 import HashScroll from "@/components/about/HashScroll";
@@ -62,11 +62,11 @@ function easedFade(direction: string) {
   return `linear-gradient(${direction}, ${stops.map(([a, p]) => `rgba(0,0,0,${a}) ${p}%`).join(", ")})`;
 }
 
-const KEY_MESSAGES = [
-  { title: "Connected regional expertise", body: "Local teams who know their sites, backed by the wider TNT family." },
-  { title: "Broad equipment capabilities", body: "Cranes, rigging systems and transport across the network." },
-  { title: "Integrated industrial services", body: "Lifting, rigging, moving, hauling and storage under one conversation." },
-  { title: "Project-specific technical support", body: "Planning and engineering matched to what each job needs." },
+const KEY_MESSAGES: { title: string; body: string; icon: IconName }[] = [
+  { title: "Connected regional expertise", icon: "pin", body: "Local teams who know their sites, backed by the wider TNT family." },
+  { title: "Broad equipment capabilities", icon: "crawler", body: "Cranes, rigging systems and transport across the network." },
+  { title: "Integrated industrial services", icon: "rigging", body: "Lifting, rigging, moving, hauling and storage under one conversation." },
+  { title: "Project-specific technical support", icon: "engineering", body: "Planning and engineering matched to what each job needs." },
 ];
 
 const ENGINEERING_POINTS = [
@@ -156,32 +156,81 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* 02 — INTRODUCTION */}
+      {/* 02 — INTRODUCTION. Redesigned 2026-11-18, on request: header row
+          (heading left, intro right), then a bento grid — a tall photo tile
+          carrying the family-company roll call (from COMPANIES, not
+          hardcoded), and the four key messages as numbered icon cards. */}
       <section aria-labelledby="intro-heading" className="bg-tnt-gray">
-        <div className="grid gap-12 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-20 lg:px-[4.45vw]">
-          <div>
-            <Kicker>The TNT Network</Kicker>
-            <h2 className="mt-4 font-display text-5xl leading-[1.02] text-black uppercase sm:text-6xl">
-              <span id="intro-heading">
-                One network.
-                <br />
-                <span className="text-tnt-amber">Complete project support.</span>
-              </span>
-            </h2>
-          </div>
-          <div>
-            <p className="font-body text-lg leading-relaxed text-tnt-body">
+        <div className="px-4 py-20 sm:px-6 sm:py-28 lg:px-[4.45vw]">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:items-end lg:gap-20">
+            <div>
+              <Kicker>The TNT Network</Kicker>
+              <h2 className="mt-4 font-display text-5xl leading-[1.02] text-black uppercase sm:text-6xl">
+                <span id="intro-heading">
+                  One network.
+                  <br />
+                  <span className="text-tnt-amber">Complete project support.</span>
+                </span>
+              </h2>
+            </div>
+            <p className="font-body text-lg leading-relaxed text-tnt-body lg:pb-2">
               TNT Crane &amp; Rigging brings together specialized equipment, experienced teams and
               regional expertise for lifting, rigging, transportation, engineering and industrial
               projects. Through its family of companies, TNT connects customers with the capabilities
               their specific project requires.
             </p>
-            <ul className="mt-10 grid gap-x-10 gap-y-7 sm:grid-cols-2">
-              {KEY_MESSAGES.map((m) => (
-                <li key={m.title} className="border-t border-black/10 pt-4">
-                  <span aria-hidden="true" className="block h-0.5 w-5 bg-tnt-amber" />
-                  <h3 className="mt-3 font-display text-xl text-black uppercase">{m.title}</h3>
-                  <p className="mt-2 font-body text-[15px] leading-relaxed text-black/60">{m.body}</p>
+          </div>
+
+          <div className="mt-14 grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-6">
+            {/* Photo tile + family roll call */}
+            <div className="relative min-h-[26rem] overflow-hidden rounded-2xl bg-black lg:min-h-0">
+              <Image
+                src="/photos/tnt-crawler-bridge-lift.jpg"
+                alt="A TNT crawler crane lifting a bridge section"
+                fill
+                sizes="(min-width: 1024px) 45vw, 100vw"
+                className="object-cover"
+              />
+              <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
+                <p className="flex items-baseline gap-3 text-white">
+                  <span className="font-display text-7xl leading-none text-tnt-amber">{COMPANIES.length}</span>
+                  <span className="font-body text-base leading-snug font-semibold">
+                    operating companies
+                    <br />
+                    across the US &amp; Canada
+                  </span>
+                </p>
+                <ul className="mt-6 flex flex-wrap gap-2">
+                  {COMPANIES.map((c) => (
+                    <li
+                      key={c.id}
+                      className="rounded-full border border-white/25 bg-white/10 px-3.5 py-1.5 font-body text-sm text-white backdrop-blur-sm"
+                    >
+                      {c.short}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* Key messages */}
+            <ul className="grid gap-5 sm:grid-cols-2 lg:gap-6">
+              {KEY_MESSAGES.map((m, i) => (
+                <li
+                  key={m.title}
+                  className="group flex flex-col rounded-2xl border border-black/[0.06] bg-white p-6 transition duration-300 hover:-translate-y-1 hover:border-tnt-amber hover:shadow-[0_18px_40px_-20px_rgba(0,0,0,0.35)] sm:p-7"
+                >
+                  <div className="flex items-start justify-between">
+                    <span className="grid h-14 w-14 place-items-center rounded-xl bg-tnt-amber/15 text-black transition-colors group-hover:bg-tnt-amber">
+                      <Icon name={m.icon} className="h-7 w-7" strokeWidth={1.6} />
+                    </span>
+                    <span aria-hidden="true" className="font-display text-4xl leading-none text-black/10 transition-colors group-hover:text-tnt-amber">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                  </div>
+                  <h3 className="mt-8 font-display text-2xl leading-tight text-black uppercase">{m.title}</h3>
+                  <p className="mt-3 font-body text-base leading-relaxed text-tnt-body">{m.body}</p>
                 </li>
               ))}
             </ul>
