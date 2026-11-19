@@ -77,13 +77,6 @@ const ENGINEERING_POINTS = [
   "Project-specific technical support",
 ];
 
-const SAFETY_POINTS = [
-  "Safety-focused planning",
-  "Qualified operating teams",
-  "Established safety procedures",
-  "Project-specific risk considerations",
-];
-
 /** Companies that offer a service directly, by short name. */
 function directProviders(id: (typeof SERVICES)[number]["id"]) {
   return COMPANIES.filter((c) => availability(c.id, id).status === "direct").map((c) => c.short);
@@ -578,16 +571,13 @@ export default function ServicesPage() {
                 Safety is an essential consideration throughout TNT&rsquo;s lifting, rigging and
                 industrial operations, and iCARE is the program every company in the family works to.
               </p>
-              <ul className="mt-6 flex-1 space-y-2">
-                {SAFETY_POINTS.map((p) => (
-                  <li key={p} className="flex items-start gap-3 font-body text-[15px] text-black/75">
-                    <span aria-hidden="true" className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-tnt-amber" />
-                    {p}
-                  </li>
-                ))}
-              </ul>
+              {/* Safety-points list removed 2026-11-19: the /safety page's
+                  lift-safety process covers it; this card links there. */}
+              <p className="mt-3 flex-1 font-body text-base leading-relaxed text-tnt-body">
+                See how planning, training and inspection come together on every lift.
+              </p>
               <div className="mt-8">
-                <Button href="/#safety" variant="primary">
+                <Button href="/safety" variant="primary">
                   Our Safety Commitment
                 </Button>
               </div>

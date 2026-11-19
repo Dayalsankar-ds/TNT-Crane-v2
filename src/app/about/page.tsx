@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Button from "@/components/site/Button";
-import { Eyebrow, Heading } from "@/components/site/primitives";
+import { Eyebrow, Heading, Kicker } from "@/components/site/primitives";
 import ScrollButton from "@/components/about/ScrollButton";
 import HashScroll from "@/components/about/HashScroll";
 import Timeline from "@/components/about/Timeline";
 import FamilyBento from "@/components/about/FamilyBento";
 import IndustriesTabs from "@/components/about/IndustriesTabs";
-import IIFCommitment from "@/components/about/IIFCommitment";
 import CapabilityExplorer from "@/components/about/CapabilityExplorer";
 
 /**
@@ -264,10 +263,34 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 05 — INCIDENT & INJURY FREE (2026-11-16, on request): replaces
-          "Our Footprint" (company/state table, stats, photo strip) — see
-          IIFCommitment.tsx. */}
-      <IIFCommitment />
+      {/* 05 — INCIDENT & INJURY FREE. The full six-commitment section moved
+          to /safety on 2026-11-19 (on request, so it isn't repeated); this
+          is the short summary that links there. */}
+      <section aria-labelledby="iif-summary-heading" className="bg-white">
+        <div className="grid gap-8 px-4 py-20 sm:px-6 sm:py-24 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end lg:gap-20 lg:px-[4.45vw]">
+          <div>
+            <Kicker>Incident &amp; Injury Free</Kicker>
+            <h2 className="mt-4 font-display text-5xl leading-[1.02] text-black uppercase sm:text-6xl">
+              <span id="iif-summary-heading">
+                Committed to the elimination
+                <br />
+                <span className="text-tnt-amber">of workplace injuries.</span>
+              </span>
+            </h2>
+          </div>
+          <div className="lg:pb-2">
+            <p className="font-body text-lg leading-relaxed text-tnt-body">
+              Incident &amp; Injury Free is the commitment every company in the TNT family shares,
+              backed by certified crews and a lift-safety process that runs before every job.
+            </p>
+            <div className="mt-8">
+              <Button href="/safety" variant="primary">
+                Our Safety Commitment
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* 06 — "Our Commitment to Safety" (iCARE badge + four safety points)
           removed 2026-11-16, on request; the Incident & Injury Free section

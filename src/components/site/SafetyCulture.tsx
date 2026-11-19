@@ -175,7 +175,7 @@ export default function SafetyCulture() {
             built into how we plan, communicate and work — every day.
           </p>
           <div className="mt-7 lg:mt-[3.2vh]">
-            <Button href="/about#incident-injury-free" variant="primary" className="px-6 py-3.5">
+            <Button href="/safety" variant="primary" className="px-6 py-3.5">
               Our Safety Commitment
             </Button>
           </div>

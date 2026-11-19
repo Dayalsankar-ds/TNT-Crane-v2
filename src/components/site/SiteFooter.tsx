@@ -44,7 +44,7 @@ const COLUMNS: { heading: string; links: FooterLink[] }[] = [
       { label: "Who We Are", href: "/about" },
       { label: "Coverage Map", href: "/#coverage" },
       { label: "Family of Companies", href: "/#family" },
-      { label: "Safety & Record", href: "/#safety" },
+      { label: "Safety & Record", href: "/safety" },
       { label: "Contact Us", href: "/contact" },
       { label: "Careers", href: null },
       { label: "News", href: "https://tntcrane.com/news/", external: true },

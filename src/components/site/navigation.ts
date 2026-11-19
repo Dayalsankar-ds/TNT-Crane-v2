@@ -187,9 +187,9 @@ export const NAV_GROUPS: NavGroup[] = [
   // reachable two ways rather than a second copy of it.
   // Label shortened to "Safety" 2026-10-26, on request ("remove the needs").
   // Disabled 2026-11-19, on request ("disable the safety text and remove the
-  // functionality"): href null, so it renders inert like Careers / For Sale.
-  // The #safety section itself is still on the homepage.
-  { label: "Safety", href: null, columns: [] },
+  // functionality"), then re-enabled the same day pointing at the new
+  // dedicated /safety page (built on request).
+  { label: "Safety", href: "/safety", columns: [] },
   // Contact Us replaced the inert "Careers" item in this slot (2026-10-08,
   // on request). Repointed the same day from the homepage's /#contact
   // section to the dedicated /contact page, on request — which also gives
