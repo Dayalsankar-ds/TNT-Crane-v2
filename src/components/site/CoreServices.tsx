@@ -123,6 +123,7 @@
  * (and this section's dark variant) was removed 2026-10-01, on request.
  */
 
+import Image from "next/image";
 import Link from "next/link";
 import Button from "./Button";
 
@@ -247,13 +248,19 @@ export default function CoreServices() {
                     className="relative aspect-[3/1] bg-black/80 lg:aspect-auto lg:h-full lg:min-h-[72px]"
                     style={{ clipPath: SLANT }}
                   >
+                    {/* next/image + eager (2026-11-19, fix for "images are
+                        missing"): the plain lazy <img> pulled the 350–430 KB
+                        originals and showed the dark plate until each one
+                        arrived. This serves resized WebP and starts loading
+                        with the page. */}
                     <div className="absolute inset-px overflow-hidden" style={{ clipPath: SLANT }}>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
+                      <Image
                         src={r.photo}
                         alt={r.alt}
-                        loading="lazy"
-                        className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+                        fill
+                        loading="eager"
+                        sizes="(min-width: 1024px) 32vw, 100vw"
+                        className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
                       />
                     </div>
                   </div>
