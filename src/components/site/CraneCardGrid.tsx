@@ -177,7 +177,7 @@ export default function CraneCardGrid({
     <div className="grid gap-8 lg:grid-cols-[300px_1fr] lg:gap-10">
       {/* ── Filter panel, left column (layout per tntcrane.com's chart
           filter: grey panel, search + full-width button, checkbox groups) ── */}
-      <aside className="self-start rounded-sm bg-[#f4f4f4] p-5 sm:p-6 lg:sticky lg:top-[calc(var(--chrome-h)+1.5rem)]">
+      <aside className="self-start rounded-sm bg-tnt-gray p-5 sm:p-6 lg:sticky lg:top-[calc(var(--chrome-h)+1.5rem)]">
         <form role="search" onSubmit={(e) => e.preventDefault()}>
           <label className="block">
             <span className="sr-only">Search by make or model</span>

@@ -87,7 +87,7 @@
  * still points at it; renaming the anchor would mean touching every place
  * that links to the group, not just this file.
  *
- * LIGHT GREY THEME: shell is `bg-tnt-gray` (#eeeeee — this token's own
+ * LIGHT GREY THEME: shell is `bg-tnt-gray` (#f7f7f7, was #eeeeee — this token's own
  * globals.css comment literally calls it out for "alternating section
  * backgrounds"), not plain white, so this section reads as its own tinted
  * band between the white Full-Scope Capability section above and whatever

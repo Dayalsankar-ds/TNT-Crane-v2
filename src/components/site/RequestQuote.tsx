@@ -38,7 +38,7 @@
  * LIGHT-MODE SHELL IS `bg-tnt-gray` (2026-09-26, on request — same "add grey
  * bg" ask SafetyCulture.tsx got, for the same reason: this section sat right
  * after ContactSection, both `bg-white`, so they ran together with no
- * visible seam. `tnt-gray` (#eeeeee) is globals.css's own token for exactly
+ * visible seam. `tnt-gray` (#f7f7f7, was #eeeeee) is globals.css's own token for exactly
  * this — "alternating section backgrounds". The form/success card underneath
  * stays `bg-white` — it now reads as a card floating on the grey band rather
  * than blending into it, same pattern the floating map cards use.

@@ -63,7 +63,7 @@
  * on this section, we are not showing difference on bg between the
  * sections"): was `bg-white`, same as CoverageMap/BranchLocator above it and
  * ContactSection below it, so three sections in a row read as one
- * undifferentiated block. `tnt-gray` (#eeeeee) is the token globals.css
+ * undifferentiated block. `tnt-gray` (#f7f7f7, was #eeeeee) is the token globals.css
  * itself documents for exactly this — "alternating section backgrounds".
  *
  * 2026-07-30: the certification-chip row briefly moved to a new strip right
@@ -107,7 +107,7 @@ export default function SafetyCulture() {
         <div
           aria-hidden="true"
           className="absolute inset-0 hidden lg:block lg:[clip-path:polygon(0_0,67.15%_0,55.5%_100%,0_100%)]"
-          style={{ background: "linear-gradient(to right, #eeeeee 26.2%, rgba(238,238,238,0) 67.15%)" }}
+          style={{ background: "linear-gradient(to right, #f7f7f7 26.2%, rgba(247,247,247,0) 67.15%)" }}
         />
         <div
           aria-hidden="true"

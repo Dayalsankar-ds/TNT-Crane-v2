@@ -41,10 +41,20 @@ export const ICARE_PRINCIPLES: { icon: string; title: string; body: string }[] =
   },
 ];
 
-export const TRAINING: { region: string; companies: string; points: string[] }[] = [
+/** Hero fact strip. Each is a fact a family site publishes, labelled with
+ *  who it applies to. */
+export const HERO_FACTS: { value: string; label: string }[] = [
+  { value: "IIF", label: "Incident & Injury Free, across the family" },
+  { value: "NCCCO · NCCER", label: "Certified operators in the US" },
+  { value: "COR", label: "Certified safety program in Canada" },
+  { value: "Platinum", label: "Highwire Safety Award 2024, RMS Cranes" },
+];
+
+export const TRAINING: { region: string; companies: string; badges: string[]; points: string[] }[] = [
   {
     region: "United States",
     companies: "TNT Crane & Rigging · Southway · RMS Cranes",
+    badges: ["NCCCO", "NCCER", "In-house evaluation"],
     points: [
       "Every operator passes an in-house operator evaluation program",
       "Operators hold NCCCO and NCCER certifications",
@@ -54,6 +64,7 @@ export const TRAINING: { region: string; companies: string; points: string[] }[]
   {
     region: "Canada",
     companies: "TNT Crane & Rigging Canada · Eagle West",
+    badges: ["Alberta trade certificate", "Red Seal", "BC Crane Safe"],
     points: [
       "Operators hold a trade certificate recognized by Alberta Apprenticeship and Industry Training, or work as supervised registered apprentices",
       "Many operators carry Red Seal designations; BC crews hold BC Crane Safe credentials",

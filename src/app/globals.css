@@ -38,11 +38,15 @@
   /* One step up from black so the chrome still reads as two tiers (black
      utility strip over the nav). Neutral grey — no blue cast. */
   --color-tnt-slate: #1a1a1a; /* nav bar, dark chrome */
-  --color-tnt-gray: #eeeeee; /* alternating section backgrounds */
+  /* Lightened 2026-11-19 from #eeeeee, on request ("reduce that grayish
+     color in the entire project … looks so harsh, content is not visible"). */
+  --color-tnt-gray: #f7f7f7; /* alternating section backgrounds */
   --color-tnt-sand: #eeece6; /* warm off-white band (Enerblock-style split) */
   --color-tnt-paper: #e9eced; /* cool technical paper — light-world base of the
                                  "Technical Paper" direction; sand is legacy */
-  --color-tnt-body: #707070; /* paragraph text */
+  /* Darkened 2026-11-19 from #707070 (same request) so paragraphs stay
+     readable on the grey bands. */
+  --color-tnt-body: #5c5c5c; /* paragraph text */
   --color-tnt-meta: #666666; /* labels, meta */
 
   /* TYPOGRAPHY FORMAT (2026-10-26, on request — follow strictly): display =
